@@ -1,0 +1,11 @@
+C:\Projetos\controle-financeiro-ia\tests\ControleFinanceiro.Tests\bin\Debug\net8.0\ControleFinanceiro.Tests.deps.json
+C:\Projetos\controle-financeiro-ia\tests\ControleFinanceiro.Tests\bin\Debug\net8.0\ControleFinanceiro.Tests.dll
+C:\Projetos\controle-financeiro-ia\tests\ControleFinanceiro.Tests\bin\Debug\net8.0\ControleFinanceiro.Tests.pdb
+C:\Projetos\controle-financeiro-ia\tests\ControleFinanceiro.Tests\obj\Debug\net8.0\ControleFinanceiro.Tests.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projetos\controle-financeiro-ia\tests\ControleFinanceiro.Tests\obj\Debug\net8.0\ControleFinanceiro.Tests.AssemblyInfoInputs.cache
+C:\Projetos\controle-financeiro-ia\tests\ControleFinanceiro.Tests\obj\Debug\net8.0\ControleFinanceiro.Tests.AssemblyInfo.cs
+C:\Projetos\controle-financeiro-ia\tests\ControleFinanceiro.Tests\obj\Debug\net8.0\ControleFinanceiro.Tests.csproj.CoreCompileInputs.cache
+C:\Projetos\controle-financeiro-ia\tests\ControleFinanceiro.Tests\obj\Debug\net8.0\ControleFinanceiro.Tests.dll
+C:\Projetos\controle-financeiro-ia\tests\ControleFinanceiro.Tests\obj\Debug\net8.0\refint\ControleFinanceiro.Tests.dll
+C:\Projetos\controle-financeiro-ia\tests\ControleFinanceiro.Tests\obj\Debug\net8.0\ControleFinanceiro.Tests.pdb
+C:\Projetos\controle-financeiro-ia\tests\ControleFinanceiro.Tests\obj\Debug\net8.0\ref\ControleFinanceiro.Tests.dll

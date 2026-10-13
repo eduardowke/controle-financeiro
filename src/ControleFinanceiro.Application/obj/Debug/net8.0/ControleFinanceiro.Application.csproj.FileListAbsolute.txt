@@ -1,0 +1,15 @@
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Application\bin\Debug\net8.0\ControleFinanceiro.Application.deps.json
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Application\bin\Debug\net8.0\ControleFinanceiro.Application.dll
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Application\bin\Debug\net8.0\ControleFinanceiro.Application.pdb
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Application\bin\Debug\net8.0\ControleFinanceiro.Domain.dll
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Application\bin\Debug\net8.0\ControleFinanceiro.Domain.pdb
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Application\obj\Debug\net8.0\ControleFinanceiro.Application.csproj.AssemblyReference.cache
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Application\obj\Debug\net8.0\ControleFinanceiro.Application.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Application\obj\Debug\net8.0\ControleFinanceiro.Application.AssemblyInfoInputs.cache
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Application\obj\Debug\net8.0\ControleFinanceiro.Application.AssemblyInfo.cs
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Application\obj\Debug\net8.0\ControleFinanceiro.Application.csproj.CoreCompileInputs.cache
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Application\obj\Debug\net8.0\Controle.8EC8DDDC.Up2Date
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Application\obj\Debug\net8.0\ControleFinanceiro.Application.dll
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Application\obj\Debug\net8.0\refint\ControleFinanceiro.Application.dll
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Application\obj\Debug\net8.0\ControleFinanceiro.Application.pdb
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Application\obj\Debug\net8.0\ref\ControleFinanceiro.Application.dll

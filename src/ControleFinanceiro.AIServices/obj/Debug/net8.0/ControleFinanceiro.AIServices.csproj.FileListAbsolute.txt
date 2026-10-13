@@ -1,0 +1,15 @@
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\bin\Debug\net8.0\ControleFinanceiro.AIServices.deps.json
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\bin\Debug\net8.0\ControleFinanceiro.AIServices.dll
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\bin\Debug\net8.0\ControleFinanceiro.AIServices.pdb
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\bin\Debug\net8.0\ControleFinanceiro.Domain.dll
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\bin\Debug\net8.0\ControleFinanceiro.Domain.pdb
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\obj\Debug\net8.0\ControleFinanceiro.AIServices.csproj.AssemblyReference.cache
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\obj\Debug\net8.0\ControleFinanceiro.AIServices.GeneratedMSBuildEditorConfig.editorconfig
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\obj\Debug\net8.0\ControleFinanceiro.AIServices.AssemblyInfoInputs.cache
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\obj\Debug\net8.0\ControleFinanceiro.AIServices.AssemblyInfo.cs
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\obj\Debug\net8.0\ControleFinanceiro.AIServices.csproj.CoreCompileInputs.cache
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\obj\Debug\net8.0\Controle.3D25E857.Up2Date
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\obj\Debug\net8.0\ControleFinanceiro.AIServices.dll
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\obj\Debug\net8.0\refint\ControleFinanceiro.AIServices.dll
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\obj\Debug\net8.0\ControleFinanceiro.AIServices.pdb
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\obj\Debug\net8.0\ref\ControleFinanceiro.AIServices.dll
