@@ -9,3 +9,4 @@ C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Domain\obj\Debug\net8.
 C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Domain\obj\Debug\net8.0\refint\ControleFinanceiro.Domain.dll
 C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Domain\obj\Debug\net8.0\ControleFinanceiro.Domain.pdb
 C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Domain\obj\Debug\net8.0\ref\ControleFinanceiro.Domain.dll
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Domain\obj\Debug\net8.0\ControleFinanceiro.Domain.sourcelink.json

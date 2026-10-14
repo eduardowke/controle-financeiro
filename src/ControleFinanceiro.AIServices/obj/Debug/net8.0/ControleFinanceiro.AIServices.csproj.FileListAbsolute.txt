@@ -13,3 +13,4 @@ C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\obj\Debug\n
 C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\obj\Debug\net8.0\refint\ControleFinanceiro.AIServices.dll
 C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\obj\Debug\net8.0\ControleFinanceiro.AIServices.pdb
 C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\obj\Debug\net8.0\ref\ControleFinanceiro.AIServices.dll
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.AIServices\obj\Debug\net8.0\ControleFinanceiro.AIServices.sourcelink.json

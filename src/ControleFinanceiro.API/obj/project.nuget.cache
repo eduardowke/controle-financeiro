@@ -1,8 +1,21 @@
 {
   "version": 2,
-  "dgSpecHash": "ghog9tP9Nbg=",
+  "dgSpecHash": "RO1lkWDFTmM=",
   "success": true,
   "projectFilePath": "C:\\Projetos\\controle-financeiro-ia\\src\\ControleFinanceiro.API\\ControleFinanceiro.API.csproj",
-  "expectedPackageFiles": [],
+  "expectedPackageFiles": [
+    "C:\\Users\\Eduardo\\.nuget\\packages\\google.protobuf\\3.30.2\\google.protobuf.3.30.2.nupkg.sha512",
+    "C:\\Users\\Eduardo\\.nuget\\packages\\microsoft.bcl.asyncinterfaces\\9.0.4\\microsoft.bcl.asyncinterfaces.9.0.4.nupkg.sha512",
+    "C:\\Users\\Eduardo\\.nuget\\packages\\microsoft.bcl.hashcode\\6.0.0\\microsoft.bcl.hashcode.6.0.0.nupkg.sha512",
+    "C:\\Users\\Eduardo\\.nuget\\packages\\microsoft.bcl.memory\\9.0.4\\microsoft.bcl.memory.9.0.4.nupkg.sha512",
+    "C:\\Users\\Eduardo\\.nuget\\packages\\microsoft.ml.tokenizers\\2.0.0\\microsoft.ml.tokenizers.2.0.0.nupkg.sha512",
+    "C:\\Users\\Eduardo\\.nuget\\packages\\microsoft.ml.tokenizers.data.cl100kbase\\2.0.0\\microsoft.ml.tokenizers.data.cl100kbase.2.0.0.nupkg.sha512",
+    "C:\\Users\\Eduardo\\.nuget\\packages\\system.buffers\\4.6.1\\system.buffers.4.6.1.nupkg.sha512",
+    "C:\\Users\\Eduardo\\.nuget\\packages\\system.io.pipelines\\9.0.4\\system.io.pipelines.9.0.4.nupkg.sha512",
+    "C:\\Users\\Eduardo\\.nuget\\packages\\system.memory\\4.6.3\\system.memory.4.6.3.nupkg.sha512",
+    "C:\\Users\\Eduardo\\.nuget\\packages\\system.runtime.compilerservices.unsafe\\6.1.2\\system.runtime.compilerservices.unsafe.6.1.2.nupkg.sha512",
+    "C:\\Users\\Eduardo\\.nuget\\packages\\system.text.encodings.web\\9.0.4\\system.text.encodings.web.9.0.4.nupkg.sha512",
+    "C:\\Users\\Eduardo\\.nuget\\packages\\system.text.json\\9.0.4\\system.text.json.9.0.4.nupkg.sha512"
+  ],
   "logs": []
 }
