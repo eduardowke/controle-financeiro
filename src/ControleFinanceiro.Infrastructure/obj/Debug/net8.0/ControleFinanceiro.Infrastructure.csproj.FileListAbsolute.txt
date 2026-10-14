@@ -14,3 +14,5 @@ C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Infrastructure\obj\Deb
 C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Infrastructure\obj\Debug\net8.0\ControleFinanceiro.Infrastructure.pdb
 C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Infrastructure\obj\Debug\net8.0\ref\ControleFinanceiro.Infrastructure.dll
 C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Infrastructure\obj\Debug\net8.0\ControleFinanceiro.Infrastructure.sourcelink.json
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Infrastructure\bin\Debug\net8.0\ControleFinanceiro.Infrastructure.runtimeconfig.json
+C:\Projetos\controle-financeiro-ia\src\ControleFinanceiro.Infrastructure\obj\Debug\net8.0\ControleFinanceiro.Infrastructure.genruntimeconfig.cache
