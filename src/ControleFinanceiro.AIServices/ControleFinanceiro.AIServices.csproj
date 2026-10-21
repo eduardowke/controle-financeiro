@@ -2,9 +2,12 @@
 
   <ItemGroup>
     <ProjectReference Include="..\ControleFinanceiro.Domain\ControleFinanceiro.Domain.csproj" />
+    <ProjectReference Include="..\ControleFinanceiro.Application\ControleFinanceiro.Application.csproj" />
   </ItemGroup>
 
   <ItemGroup>
+    <PackageReference Include="Azure.AI.OpenAI" Version="2.1.0" />
+    <PackageReference Include="Microsoft.Extensions.Configuration.Abstractions" Version="10.0.13" />
     <PackageReference Include="Microsoft.ML.Tokenizers" Version="2.0.0" />
     <PackageReference Include="Microsoft.ML.Tokenizers.Data.Cl100kBase" Version="2.0.0" />
   </ItemGroup>

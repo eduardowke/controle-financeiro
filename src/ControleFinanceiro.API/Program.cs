@@ -1,3 +1,4 @@
+using ControleFinanceiro.AIServices;
 using ControleFinanceiro.Application.DTOs;
 using ControleFinanceiro.Application.Interfaces;
 using ControleFinanceiro.Infrastructure.Data;
@@ -14,6 +15,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 builder.Services.AddScoped<IContaService, ContaService>();
 builder.Services.AddScoped<ITransacaoService, TransacaoService>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+builder.Services.AddScoped<IAICategorizationService, AICategorizationService>();
 
 // Configuração do Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
@@ -66,6 +68,13 @@ app.MapGet("/api/transacoes", async (ITransacaoService service) =>
 {
     var transacoes = await service.ObterTodasAsync();
     return Results.Ok(transacoes);
+});
+
+// --- ENDPOINT DE IA (CATEGORIZADOR) ---
+app.MapPost("/api/ia/categorizar", async (AnaliseGastoRequestDto dto, IAICategorizationService aiService) =>
+{
+    var resultado = await aiService.CategorizarGastoAsync(dto);
+    return Results.Ok(resultado);
 });
 
 app.Run();
