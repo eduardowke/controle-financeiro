@@ -1,4 +1,7 @@
+using ControleFinanceiro.Application.DTOs;
+using ControleFinanceiro.Application.Interfaces;
 using ControleFinanceiro.Infrastructure.Data;
+using ControleFinanceiro.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -7,8 +10,62 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
+// Registro dos Serviços na Injeção de Dependência
+builder.Services.AddScoped<IContaService, ContaService>();
+builder.Services.AddScoped<ITransacaoService, TransacaoService>();
+builder.Services.AddScoped<ICategoriaService, CategoriaService>();
+
+// Configuração do Swagger/OpenAPI
+builder.Services.AddEndpointsApiExplorer();
+builder.Services.AddSwaggerGen();
+
 var app = builder.Build();
 
+if (app.Environment.IsDevelopment())
+{
+    app.UseSwagger();
+    app.UseSwaggerUI();
+}
+
 app.MapGet("/", () => "API do Controle Financeiro Rodando!");
+
+// --- ENDPOINTS DE CONTAS ---
+app.MapPost("/api/contas", async (CriarContaDto dto, IContaService service) =>
+{
+    var conta = await service.CriarAsync(dto);
+    return Results.Created($"/api/contas/{conta.Id}", conta);
+});
+
+app.MapGet("/api/contas", async (IContaService service) =>
+{
+    var contas = await service.ObterTodasAsync();
+    return Results.Ok(contas);
+});
+
+// --- ENDPOINTS DE CATEGORIAS ---
+app.MapPost("/api/categorias", async (CriarCategoriaDto dto, ICategoriaService service) =>
+{
+    var categoria = await service.CriarAsync(dto);
+    return Results.Created($"/api/categorias/{categoria.Id}", categoria);
+});
+
+app.MapGet("/api/categorias", async (ICategoriaService service) =>
+{
+    var categorias = await service.ObterTodasAsync();
+    return Results.Ok(categorias);
+});
+
+// --- ENDPOINTS DE TRANSAÇÕES ---
+app.MapPost("/api/transacoes", async (CriarTransacaoDto dto, ITransacaoService service) =>
+{
+    var transacao = await service.CriarAsync(dto);
+    return Results.Created($"/api/transacoes/{transacao.Id}", transacao);
+});
+
+app.MapGet("/api/transacoes", async (ITransacaoService service) =>
+{
+    var transacoes = await service.ObterTodasAsync();
+    return Results.Ok(transacoes);
+});
 
 app.Run();

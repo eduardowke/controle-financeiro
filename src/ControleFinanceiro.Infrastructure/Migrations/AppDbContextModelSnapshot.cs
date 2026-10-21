@@ -94,6 +94,9 @@ namespace ControleFinanceiro.Infrastructure.Migrations
                     b.Property<bool>("IsPago")
                         .HasColumnType("bit");
 
+                    b.Property<int>("Tipo")
+                        .HasColumnType("int");
+
                     b.Property<decimal>("Valor")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
