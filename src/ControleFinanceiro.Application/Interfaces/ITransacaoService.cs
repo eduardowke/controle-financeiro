@@ -4,6 +4,7 @@ namespace ControleFinanceiro.Application.Interfaces;
 
 public interface ITransacaoService
 {
-    Task<TransacaoResponseDto> CriarAsync(CriarTransacaoDto dto);
+    Task<TransacaoResponseDto> CriarTransacaoAsync(CriarTransacaoDto dto);
+    Task<TransacaoResponseDto?> ObterPorIdAsync(int id);
     Task<IEnumerable<TransacaoResponseDto>> ObterTodasAsync();
 }

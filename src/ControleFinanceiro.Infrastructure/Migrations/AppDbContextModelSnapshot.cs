@@ -81,10 +81,16 @@ namespace ControleFinanceiro.Infrastructure.Migrations
                     b.Property<int>("CategoriaId")
                         .HasColumnType("int");
 
+                    b.Property<double?>("ConfiancaIA")
+                        .HasColumnType("float");
+
                     b.Property<int>("ContaId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("Data")
+                        .HasColumnType("datetime2");
+
+                    b.Property<DateTime>("DataCriacao")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Descricao")

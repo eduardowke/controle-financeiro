@@ -4,6 +4,7 @@ using ControleFinanceiro.Application.Interfaces;
 using ControleFinanceiro.Infrastructure.Data;
 using ControleFinanceiro.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using ControleFinanceiro.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -16,6 +17,8 @@ builder.Services.AddScoped<IContaService, ContaService>();
 builder.Services.AddScoped<ITransacaoService, TransacaoService>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<IAICategorizationService, AICategorizationService>();
+builder.Services.AddScoped<ITransacaoRepository, TransacaoRepository>();
+
 
 // Configuração do Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
@@ -23,11 +26,9 @@ builder.Services.AddSwaggerGen();
 
 var app = builder.Build();
 
-if (app.Environment.IsDevelopment())
-{
-    app.UseSwagger();
-    app.UseSwaggerUI();
-}
+// Configuração do Swagger
+app.UseSwagger();
+app.UseSwaggerUI();
 
 app.MapGet("/", () => "API do Controle Financeiro Rodando!");
 
@@ -60,7 +61,7 @@ app.MapGet("/api/categorias", async (ICategoriaService service) =>
 // --- ENDPOINTS DE TRANSAÇÕES ---
 app.MapPost("/api/transacoes", async (CriarTransacaoDto dto, ITransacaoService service) =>
 {
-    var transacao = await service.CriarAsync(dto);
+    var transacao = await service.CriarTransacaoAsync(dto);
     return Results.Created($"/api/transacoes/{transacao.Id}", transacao);
 });
 

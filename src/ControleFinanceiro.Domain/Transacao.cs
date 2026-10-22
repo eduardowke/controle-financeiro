@@ -1,11 +1,5 @@
 namespace ControleFinanceiro.Domain;
 
-public enum TipoTransacao
-{
-    Receita = 1,
-    Despesa = 2
-}
-
 public class Transacao
 {
     public int Id { get; set; }
@@ -21,4 +15,8 @@ public class Transacao
 
     public int CategoriaId { get; set; }
     public Categoria Categoria { get; set; } = null!;
+
+    // Novas propriedades para suporte à IA e rastreabilidade
+    public double? ConfiancaIA { get; set; }
+    public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
 }

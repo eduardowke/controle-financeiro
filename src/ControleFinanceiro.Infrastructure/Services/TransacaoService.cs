@@ -6,29 +6,24 @@ using Microsoft.EntityFrameworkCore;
 
 namespace ControleFinanceiro.Infrastructure.Services;
 
-public class TransacaoService : ITransacaoService
+public class TransacaoService(AppDbContext context) : ITransacaoService
 {
-    private readonly AppDbContext _context;
-
-    public TransacaoService(AppDbContext context)
-    {
-        _context = context;
-    }
-
-    public async Task<TransacaoResponseDto> CriarAsync(CriarTransacaoDto dto)
+    public async Task<TransacaoResponseDto> CriarTransacaoAsync(CriarTransacaoDto dto)
     {
         var transacao = new Transacao
         {
             Descricao = dto.Descricao,
             Valor = dto.Valor,
             Tipo = dto.Tipo,
-            Data = DateTime.UtcNow,
+            Data = dto.Data == default ? DateTime.UtcNow : dto.Data,
+            IsPago = dto.IsPago,
             ContaId = dto.ContaId,
-            CategoriaId = dto.CategoriaId
+            CategoriaId = dto.CategoriaId,
+            ConfiancaIA = dto.ConfiancaIA
         };
 
-        _context.Transacoes.Add(transacao);
-        await _context.SaveChangesAsync();
+        context.Transacoes.Add(transacao);
+        await context.SaveChangesAsync();
 
         return new TransacaoResponseDto
         {
@@ -37,14 +32,35 @@ public class TransacaoService : ITransacaoService
             Valor = transacao.Valor,
             Tipo = transacao.Tipo,
             Data = transacao.Data,
+            IsPago = transacao.IsPago,
             ContaId = transacao.ContaId,
-            CategoriaId = transacao.CategoriaId
+            CategoriaId = transacao.CategoriaId,
+            ConfiancaIA = transacao.ConfiancaIA
+        };
+    }
+
+    public async Task<TransacaoResponseDto?> ObterPorIdAsync(int id)
+    {
+        var transacao = await context.Transacoes.FirstOrDefaultAsync(t => t.Id == id);
+        if (transacao == null) return null;
+
+        return new TransacaoResponseDto
+        {
+            Id = transacao.Id,
+            Descricao = transacao.Descricao,
+            Valor = transacao.Valor,
+            Tipo = transacao.Tipo,
+            Data = transacao.Data,
+            IsPago = transacao.IsPago,
+            ContaId = transacao.ContaId,
+            CategoriaId = transacao.CategoriaId,
+            ConfiancaIA = transacao.ConfiancaIA
         };
     }
 
     public async Task<IEnumerable<TransacaoResponseDto>> ObterTodasAsync()
     {
-        return await _context.Transacoes
+        return await context.Transacoes
             .Select(t => new TransacaoResponseDto
             {
                 Id = t.Id,
@@ -52,8 +68,10 @@ public class TransacaoService : ITransacaoService
                 Valor = t.Valor,
                 Tipo = t.Tipo,
                 Data = t.Data,
+                IsPago = t.IsPago,
                 ContaId = t.ContaId,
-                CategoriaId = t.CategoriaId
+                CategoriaId = t.CategoriaId,
+                ConfiancaIA = t.ConfiancaIA
             })
             .ToListAsync();
     }
