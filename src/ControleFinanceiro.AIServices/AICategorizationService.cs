@@ -1,57 +1,106 @@
 using System.Text.Json;
 using ControleFinanceiro.Application.DTOs;
 using ControleFinanceiro.Application.Interfaces;
+using ControleFinanceiro.Domain;
 using Microsoft.Extensions.Configuration;
 using OpenAI.Chat;
 
 namespace ControleFinanceiro.AIServices;
 
-public class AICategorizationService : IAICategorizationService
+public class AICategorizationService(
+    IConfiguration configuration,
+    IEmbeddingService embeddingService,
+    ICategoriaService categoriaService) : IAICategorizationService
 {
-    private readonly string _apiKey;
-    private readonly string _model;
+    private readonly string _apiKey = configuration["OpenAI:ApiKey"] ?? string.Empty;
+    private readonly string _model = configuration["OpenAI:Model"] ?? "gpt-4o-mini";
+    private const float LimiarMinimoSimilaridade = 0.65f;
 
-    public AICategorizationService(IConfiguration configuration)
+    public async Task<ResultadoCategorizacaoDto> CategorizarDescricaoAsync(string descricao, CancellationToken cancellationToken = default)
     {
-        _apiKey = configuration["OpenAI:ApiKey"] ?? string.Empty;
-        _model = configuration["OpenAI:Model"] ?? "gpt-4o-mini";
+        if (string.IsNullOrWhiteSpace(descricao))
+            throw new ArgumentException("A descrição da transação é obrigatória.", nameof(descricao));
+
+        // -----------------------------------------------------------------------------
+        // ETAPA 1: Tentar busca vetorial por similaridade de cosseno (Módulo 3)
+        // -----------------------------------------------------------------------------
+        try
+        {
+            var categorias = await categoriaService.ObterTodasAsync();
+            
+            if (categorias.Any())
+            {
+                var embeddingDescricao = await embeddingService.GerarEmbeddingAsync(descricao, cancellationToken);
+                var nomesCategorias = categorias.Select(c => c.Nome).ToList();
+                var embeddingsCategorias = (await embeddingService.GerarEmbeddingsEmLoteAsync(nomesCategorias, cancellationToken)).ToList();
+
+                int melhorCategoriaId = 0;
+                string melhorCategoriaNome = string.Empty;
+                float maiorSimilaridade = -1.0f;
+
+                for (int i = 0; i < categorias.Count(); i++)
+                {
+                    var categoria = categorias.ElementAt(i);
+                    var embeddingCat = embeddingsCategorias[i];
+
+                    float sim = VectorMath.CosineSimilarity(embeddingDescricao.Vetor.Span, embeddingCat.Vetor.Span);
+
+                    if (sim > maiorSimilaridade)
+                    {
+                        maiorSimilaridade = sim;
+                        melhorCategoriaId = categoria.Id;
+                        melhorCategoriaNome = categoria.Nome;
+                    }
+                }
+
+                // Se a similaridade atingir o limiar de confiança, devolve o resultado vetorial
+                if (maiorSimilaridade >= LimiarMinimoSimilaridade)
+                {
+                    return new ResultadoCategorizacaoDto(
+                        melhorCategoriaId,
+                        melhorCategoriaNome,
+                        maiorSimilaridade,
+                        "BuscaVetorial"
+                    );
+                }
+            }
+        }
+        catch (Exception ex)
+        {
+            Console.WriteLine($"[AVISO EMBEDDINGS]: Falha na busca vetorial, acionando fallback LLM. Erro: {ex.Message}");
+        }
+
+        // -----------------------------------------------------------------------------
+        // ETAPA 2: Fallback via Prompt e ChatClient OpenAI (Sua lógica do Módulo 2)
+        // -----------------------------------------------------------------------------
+        return await CategorizarComLLMFallbackAsync(descricao, cancellationToken);
     }
 
-    public async Task<AnaliseGastoResponseDto> CategorizarGastoAsync(AnaliseGastoRequestDto dto)
+    private async Task<ResultadoCategorizacaoDto> CategorizarComLLMFallbackAsync(string descricao, CancellationToken cancellationToken)
     {
         if (string.IsNullOrWhiteSpace(_apiKey) || _apiKey == "SUA_CHAVE_OPENAI_AQUI")
         {
-            return SimularRespostaFallback(dto.TextoLivre);
+            return SimularRespostaFallback(descricao);
         }
 
         try
         {
-            // Instanciação direta para a API pública oficial da OpenAI (sem Azure)
             var chatClient = new ChatClient(_model, _apiKey);
 
             var systemPrompt = @"
 Você é um assistente de inteligência financeira estrito.
-Sua tarefa é analisar descrições em texto livre de gastos ou receitas e extrair os dados em formato JSON estrito.
+Sua tarefa é analisar uma descrição em texto livre e identificar a categoria de gasto mais adequada.
 
-Regras de Negócio:
-1. 'tipoTransacao': Retorne 1 para Receita e 2 para Despesa.
-2. 'categoriaSugerida': Identifique uma categoria simples (ex: 'Alimentação', 'Transporte', 'Moradia', 'Lazer', 'Saúde', 'Salário', 'Educação').
-3. 'valor': Extraia apenas o valor numérico em decimal (ex: 45.90). Se nenhum valor for informado, retorne 0.
-4. 'confianca': Forneça um valor entre 0.0 e 1.0 indicando a certeza da análise.
-
-Retorne APENAS um objeto JSON válido no formato:
+Retorne APENAS um objeto JSON no formato:
 {
-  ""descricaoSugerida"": ""string"",
-  ""valor"": 0.0,
   ""categoriaSugerida"": ""string"",
-  ""tipoTransacao"": 2,
-  ""confianca"": 0.95
+  ""confianca"": 0.85
 }";
 
             var messages = new List<ChatMessage>
             {
                 new SystemChatMessage(systemPrompt),
-                new UserChatMessage($"Analise a seguinte transação: \"{dto.TextoLivre}\"")
+                new UserChatMessage($"Identifique a categoria da transação: \"{descricao}\"")
             };
 
             var options = new ChatCompletionOptions
@@ -59,32 +108,36 @@ Retorne APENAS um objeto JSON válido no formato:
                 ResponseFormat = ChatResponseFormat.CreateJsonObjectFormat()
             };
 
-            ChatCompletion completion = await chatClient.CompleteChatAsync(messages, options);
+            ChatCompletion completion = await chatClient.CompleteChatAsync(messages, options, cancellationToken);
             var jsonResponse = completion.Content[0].Text;
 
-            var resultado = JsonSerializer.Deserialize<AnaliseGastoResponseDto>(jsonResponse, new JsonSerializerOptions
-            {
-                PropertyNameCaseInsensitive = true
-            });
+            using var doc = JsonDocument.Parse(jsonResponse);
+            var root = doc.RootElement;
 
-            return resultado ?? SimularRespostaFallback(dto.TextoLivre);
+            string categoria = root.TryGetProperty("categoriaSugerida", out var catElem) ? catElem.GetString() ?? "Outros" : "Outros";
+            float confianca = root.TryGetProperty("confianca", out var confElem) && confElem.TryGetSingle(out var c) ? c : 0.50f;
+
+            return new ResultadoCategorizacaoDto(
+                CategoriaId: null,
+                NomeCategoria: categoria,
+                ConfiancaIA: confianca,
+                OrigemAnalise: "FallbackLLM"
+            );
         }
         catch (Exception ex)
         {
-            Console.WriteLine($"[ERRO IA]: {ex.Message}");
-            return SimularRespostaFallback(dto.TextoLivre);
+            Console.WriteLine($"[ERRO IA LLM]: {ex.Message}");
+            return SimularRespostaFallback(descricao);
         }
     }
 
-    private static AnaliseGastoResponseDto SimularRespostaFallback(string texto)
+    private static ResultadoCategorizacaoDto SimularRespostaFallback(string texto)
     {
-        return new AnaliseGastoResponseDto
-        {
-            DescricaoSugerida = string.IsNullOrWhiteSpace(texto) ? "Transação não identificada" : texto,
-            Valor = 0.0m,
-            CategoriaSugerida = "Outros",
-            TipoTransacao = 2,
-            Confianca = 0.50
-        };
+        return new ResultadoCategorizacaoDto(
+            CategoriaId: null,
+            NomeCategoria: "Outros",
+            ConfiancaIA: 0.30f,
+            OrigemAnalise: "FallbackSimulado"
+        );
     }
 }

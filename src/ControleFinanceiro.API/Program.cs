@@ -74,8 +74,13 @@ app.MapGet("/api/transacoes", async (ITransacaoService service) =>
 // --- ENDPOINT DE IA (CATEGORIZADOR) ---
 app.MapPost("/api/ia/categorizar", async (AnaliseGastoRequestDto dto, IAICategorizationService aiService) =>
 {
-    var resultado = await aiService.CategorizarGastoAsync(dto);
+    var resultado = await aiService.CategorizarDescricaoAsync(dto.TextoLivre);
     return Results.Ok(resultado);
 });
 
+// Registro do EmbeddingService
+var openAiApiKey = builder.Configuration["OpenAI:ApiKey"] 
+    ?? throw new InvalidOperationException("Chave da OpenAI não configurada em appsettings.json");
+
+builder.Services.AddSingleton<IEmbeddingService>(new EmbeddingService(openAiApiKey));
 app.Run();

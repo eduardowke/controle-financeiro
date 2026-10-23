@@ -16,7 +16,7 @@ public class TransacoesController(
     [HttpPost]
     public async Task<IActionResult> Criar([FromBody] CriarTransacaoDto dto)
     {
-        var transacao = await transacaoService.CriarTransacaoAsync(dto); //‘ITransacaoService’ não contém uma definição para "CriarTransacaoAsync"
+        var transacao = await transacaoService.CriarTransacaoAsync(dto);
         return CreatedAtAction(nameof(ObterPorId), new { id = transacao.Id }, transacao);
     }
 
@@ -26,7 +26,7 @@ public class TransacoesController(
     [HttpGet("{id:int}")]
     public async Task<IActionResult> ObterPorId(int id)
     {
-        var transacao = await transacaoService.ObterPorIdAsync(id); //ITransacaoService’ não contém uma definição para "ObterPorIdAsync"
+        var transacao = await transacaoService.ObterPorIdAsync(id);
         if (transacao == null) return NotFound("Transação não encontrada.");
         return Ok(transacao);
     }
@@ -38,22 +38,23 @@ public class TransacoesController(
     public async Task<IActionResult> CategorizarESalvar(
         [FromBody] AnaliseGastoRequestDto dto,
         [FromQuery] int contaId,
-        [FromQuery] int categoriaId)
+        [FromQuery] int categoriaId,
+        CancellationToken cancellationToken)
     {
-        // 1. Processa o texto com a IA
-        var analise = await aiService.CategorizarGastoAsync(dto);
+        // 1. Processa a descrição com a IA (Busca Vetorial + Fallback LLM)
+        var analise = await aiService.CategorizarDescricaoAsync(dto.TextoLivre, cancellationToken);
 
-        // 2. Converte o resultado da IA para o DTO de criação
+        // 2. Converte o resultado da IA e requisição para o DTO de criação
         var criarDto = new CriarTransacaoDto
         {
-            Descricao = analise.DescricaoSugerida,
-            Valor = analise.Valor,
-            Tipo = (ControleFinanceiro.Domain.TipoTransacao)analise.TipoTransacao,
+            Descricao = dto.TextoLivre,
+            Valor = 0.0m, // Atribuído 0.0 pois o AnaliseGastoRequestDto contém apenas TextoLivre
+            Tipo = ControleFinanceiro.Domain.TipoTransacao.Despesa,
             Data = DateTime.UtcNow,
             IsPago = true,
             ContaId = contaId,
-            CategoriaId = categoriaId,
-            ConfiancaIA = analise.Confianca
+            CategoriaId = analise.CategoriaId ?? categoriaId,
+            ConfiancaIA = analise.ConfiancaIA
         };
 
         // 3. Salva no banco de dados via serviço
