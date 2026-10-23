@@ -2,9 +2,9 @@ using ControleFinanceiro.AIServices;
 using ControleFinanceiro.Application.DTOs;
 using ControleFinanceiro.Application.Interfaces;
 using ControleFinanceiro.Infrastructure.Data;
+using ControleFinanceiro.Infrastructure.Repositories;
 using ControleFinanceiro.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
-using ControleFinanceiro.Infrastructure.Repositories;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -12,23 +12,35 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddDbContext<AppDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection")));
 
-// Registro dos Serviços na Injeção de Dependência
+// Registro dos Serviços de Domínio e Infraestrutura na Injeção de Dependência
 builder.Services.AddScoped<IContaService, ContaService>();
 builder.Services.AddScoped<ITransacaoService, TransacaoService>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<IAICategorizationService, AICategorizationService>();
 builder.Services.AddScoped<ITransacaoRepository, TransacaoRepository>();
+builder.Services.AddScoped<IReceiptOCRService, ReceiptOCRService>();
 
+// Registro dos Controllers
+builder.Services.AddControllers();
+
+// Registro do EmbeddingService (deve ser feito ANTES de builder.Build())
+var openAiApiKey = builder.Configuration["OpenAI:ApiKey"] ?? string.Empty;
+builder.Services.AddSingleton<IEmbeddingService>(new EmbeddingService(openAiApiKey));
 
 // Configuração do Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// =========================================================================
+// CONSTRUÇÃO DA APLICAÇÃO (Após esta linha, builder.Services fica Read-Only)
+// =========================================================================
 var app = builder.Build();
 
-// Configuração do Swagger
+// Configuração do Pipeline HTTP / Swagger
 app.UseSwagger();
 app.UseSwaggerUI();
+
+app.MapControllers();
 
 app.MapGet("/", () => "API do Controle Financeiro Rodando!");
 
@@ -72,15 +84,10 @@ app.MapGet("/api/transacoes", async (ITransacaoService service) =>
 });
 
 // --- ENDPOINT DE IA (CATEGORIZADOR) ---
-app.MapPost("/api/ia/categorizar", async (AnaliseGastoRequestDto dto, IAICategorizationService aiService) =>
+app.MapPost("/api/ia/categorizar", async (AnaliseGastoRequestDto dto, IAICategorizationService aiService, CancellationToken cancellationToken) =>
 {
-    var resultado = await aiService.CategorizarDescricaoAsync(dto.TextoLivre);
+    var resultado = await aiService.CategorizarDescricaoAsync(dto.TextoLivre, cancellationToken);
     return Results.Ok(resultado);
 });
 
-// Registro do EmbeddingService
-var openAiApiKey = builder.Configuration["OpenAI:ApiKey"] 
-    ?? throw new InvalidOperationException("Chave da OpenAI não configurada em appsettings.json");
-
-builder.Services.AddSingleton<IEmbeddingService>(new EmbeddingService(openAiApiKey));
 app.Run();
