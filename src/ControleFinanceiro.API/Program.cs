@@ -34,6 +34,11 @@ builder.Services.AddSwaggerGen();
 //Registro da interface e serviço do chat.
 builder.Services.AddScoped<IFinancialChatService, FinancialChatService>();
 
+//TooCallingService
+builder.Services.AddScoped<IToolCallingService, ToolCallingService>();
+
+//Tool registry
+builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
 // =========================================================================
 // CONSTRUÇÃO DA APLICAÇÃO (Após esta linha, builder.Services fica Read-Only)
 // =========================================================================
