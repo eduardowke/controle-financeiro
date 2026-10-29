@@ -31,6 +31,9 @@ builder.Services.AddSingleton<IEmbeddingService>(new EmbeddingService(openAiApiK
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+//Registro da interface e serviço do chat.
+builder.Services.AddScoped<IFinancialChatService, FinancialChatService>();
+
 // =========================================================================
 // CONSTRUÇÃO DA APLICAÇÃO (Após esta linha, builder.Services fica Read-Only)
 // =========================================================================
