@@ -1,4 +1,4 @@
-    # 💰 API de Controle Financeiro Pessoal com IA Autônoma
+  # 💰 API de Controle Financeiro Pessoal com IA Autônoma
 
 API RESTful desenvolvida em **.NET 8** e **C# 12** sob os princípios da **Clean Architecture**, integrada à **OpenAI SDK** para oferecer um ecossistema completo de gestão financeira com recursos avançados de **Visão Computacional (OCR)**, **Busca Vetorial (Embeddings / RAG)**, **Execução de Ações Autônomas (Tool Calling)** e **Orquestração Multiagentes**.
 
