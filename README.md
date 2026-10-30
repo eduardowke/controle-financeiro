@@ -38,13 +38,12 @@ A solução é estruturada em camadas estritas baseadas em **Clean Architecture*
               │   ControleFinanceiro   │
               │      .Application      │
               └───────────┬────────────┘
-     ┌────────────────────┼────────────────────┐
-     │                    │                    │
-┌────────▼─────────┐ ┌────────▼─────────┐ ┌────────▼─────────┐
-│ControleFinanceiro│ │ControleFinanceiro│ │ControleFinanceiro│
-│     .Domain      │ │ .Infrastructure  │ │   .AIServices    │
-└──────────────────┘ └──────────────────┘ └──────────────────┘
-
+                          │___________________________________________________
+                          │                         │                         │
+              ┌───────────▼────────────┐┌───────────▼────────────┐┌───────────▼────────────┐
+              │   ControleFinanceiro   ││   ControleFinanceiro   ││   ControleFinanceiro   │
+              │      .Domain           ││      .Infrastructure   ││      .AIServices       │
+              └────────────────────────┘└────────────────────────┘└────────────────────────┘
 ### Stack Tecnológica:
 * **Linguagem & Runtime:** .NET 8 / C# 12
 * **Banco de Dados:** SQL Server via Entity Framework Core 8
