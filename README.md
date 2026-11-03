@@ -152,5 +152,3 @@ Navegue até https://localhost:7184/swagger no seu navegador para interagir com 
   <Elicitation label="Salvar o README.md e retornar para a Task 2 da US09" query="Criei o arquivo README.md com a documentação completa. Vamos retornar à US09 e iniciar a Task 2 — Implementação dos Agentes Especializados."/>
   <Elicitation label="Registrar um commit no Git com a documentação do projeto" query="Como registramos no Git a criação do arquivo README.md com a documentação técnica e de negócio?"/>
 </ElicitationsGroup>
-
-<FollowUp label="Quer que eu ori
