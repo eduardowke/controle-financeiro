@@ -31,6 +31,14 @@ builder.Services.AddSingleton<IEmbeddingService>(new EmbeddingService(openAiApiK
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Registra os Agentes Especializados da US-254 https://dev.azure.com/eduardowke/Controle%20Financeiro/_workitems/edit/254
+builder.Services.AddScoped<IClassifierAgent, ClassifierAgent>();
+builder.Services.AddScoped<IAuditRiskAgent, AuditRiskAgent>();
+builder.Services.AddScoped<IAdvisorAgent, AdvisorAgent>();
+
+// Registra o Orquestrador Multiagentes
+builder.Services.AddScoped<IMultiAgentOrchestratorService, MultiAgentOrchestratorService>();
+
 //Registro da interface e serviço do chat.
 builder.Services.AddScoped<IFinancialChatService, FinancialChatService>();
 

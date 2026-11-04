@@ -1,7 +1,7 @@
 using ControleFinanceiro.Application.Interfaces;
 using OpenAI.Chat;
 
-namespace ControleFinanceiro.AIServices.Services;
+namespace ControleFinanceiro.AIServices;
 
 public class AuditRiskAgent : IAuditRiskAgent
 {
