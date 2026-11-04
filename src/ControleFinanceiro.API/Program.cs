@@ -5,6 +5,7 @@ using ControleFinanceiro.Infrastructure.Data;
 using ControleFinanceiro.Infrastructure.Repositories;
 using ControleFinanceiro.Infrastructure.Services;
 using Microsoft.EntityFrameworkCore;
+using OpenAI.Chat;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -23,15 +24,18 @@ builder.Services.AddScoped<IReceiptOCRService, ReceiptOCRService>();
 // Registro dos Controllers
 builder.Services.AddControllers();
 
-// Registro do EmbeddingService (deve ser feito ANTES de builder.Build())
-var openAiApiKey = builder.Configuration["OpenAI:ApiKey"] ?? string.Empty;
+// Configuração da OpenAI (EmbeddingService e ChatClient)
+var openAiApiKey = builder.Configuration["OpenAI:ApiKey"]
+    ?? throw new InvalidOperationException("A chave 'OpenAI:ApiKey' não foi configurada no appsettings.json.");
+
 builder.Services.AddSingleton<IEmbeddingService>(new EmbeddingService(openAiApiKey));
+builder.Services.AddSingleton(new ChatClient(model: "gpt-4o-mini", apiKey: openAiApiKey));
 
 // Configuração do Swagger/OpenAPI
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-// Registra os Agentes Especializados da US-254 https://dev.azure.com/eduardowke/Controle%20Financeiro/_workitems/edit/254
+// Registra os Agentes Especializados da US-254
 builder.Services.AddScoped<IClassifierAgent, ClassifierAgent>();
 builder.Services.AddScoped<IAuditRiskAgent, AuditRiskAgent>();
 builder.Services.AddScoped<IAdvisorAgent, AdvisorAgent>();
@@ -39,14 +43,13 @@ builder.Services.AddScoped<IAdvisorAgent, AdvisorAgent>();
 // Registra o Orquestrador Multiagentes
 builder.Services.AddScoped<IMultiAgentOrchestratorService, MultiAgentOrchestratorService>();
 
-//Registro da interface e serviço do chat.
+// Registro da interface e serviço do chat
 builder.Services.AddScoped<IFinancialChatService, FinancialChatService>();
 
-//TooCallingService
+// Tool Calling Services
 builder.Services.AddScoped<IToolCallingService, ToolCallingService>();
-
-//Tool registry
 builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
+
 // =========================================================================
 // CONSTRUÇÃO DA APLICAÇÃO (Após esta linha, builder.Services fica Read-Only)
 // =========================================================================

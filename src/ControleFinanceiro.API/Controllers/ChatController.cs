@@ -34,4 +34,17 @@ public class ChatController(
         var resposta = await toolCallingService.ProcessarMensagemComAcaoAsync(dto, cancellationToken);
         return Ok(resposta);
     }
+
+    /// <summary>
+    /// Dispara o pipeline autônomo dos três agentes de IA (Classificador, Auditoria e Consultor) para análise financeira.
+    /// </summary>
+    [HttpPost("analise-multiagente")]
+    public async Task<IActionResult> AnaliseMultiagente(
+        [FromBody] MultiAgentAnalysisRequestDto request,
+        [FromServices] IMultiAgentOrchestratorService multiAgentService,
+        CancellationToken cancellationToken)
+    {
+        var resultado = await multiAgentService.ExecutarAnaliseCompletaAsync(request, cancellationToken);
+        return Ok(resultado);
+    }
 }
