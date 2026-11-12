@@ -50,10 +50,24 @@ builder.Services.AddScoped<IFinancialChatService, FinancialChatService>();
 builder.Services.AddScoped<IToolCallingService, ToolCallingService>();
 builder.Services.AddScoped<IToolRegistryService, ToolRegistryService>();
 
+// Adiciona a política de CORS liberando acesso local para o Frontend React
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowReactApp", policy =>
+    {
+        policy.WithOrigins("http://localhost:5173", "http://localhost:3000") // Portas padrões do React/Vite
+              .AllowAnyHeader()
+              .AllowAnyMethod();
+    });
+});
+
 // =========================================================================
 // CONSTRUÇÃO DA APLICAÇÃO (Após esta linha, builder.Services fica Read-Only)
 // =========================================================================
 var app = builder.Build();
+
+// Ativa a política de CORS "AllowReactApp" (configurada acima em builder.Services)
+app.UseCors("AllowReactApp");
 
 // Configuração do Pipeline HTTP / Swagger
 app.UseSwagger();
