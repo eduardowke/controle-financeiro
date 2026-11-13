@@ -171,3 +171,13 @@ Fluxo de colaboração sequencial entre três agentes autônomos especializados:
    * Navegue até o endpoint **`POST /api/Chat/analise-multiagente`**.
    * Clique em **Try it out** e execute a requisição.
    * Para depuração linha a linha, coloque um *breakpoint* (`F9`) na Action `AnaliseMultiagente` do `ChatController.cs` e navegue com `F11` (Step Into) / `F10` (Step Over).
+
+   ## 📸 Interface Visual (Dashboard & Agentes de IA)
+
+<p align="center">
+  <img src="docs/assets/dashboard-chat.png" alt="Dashboard Financeiro e Chat IA" width="800">
+</p>
+
+<p align="center">
+  <img src="docs/assets/painel-multiagente.png" alt="Consultoria Multiagente" width="800">
+</p>

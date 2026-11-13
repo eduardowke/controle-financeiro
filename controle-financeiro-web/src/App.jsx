@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Wallet, TrendingUp, TrendingDown, RefreshCw, Send, Bot, User } from 'lucide-react';
+import { Wallet, TrendingUp, TrendingDown, RefreshCw, Send, Bot, User, BrainCircuit, ShieldAlert, Lightbulb, PieChart } from 'lucide-react';
 import './App.css';
 
 function App() {
@@ -13,6 +13,10 @@ function App() {
   ]);
   const [pergunta, setPergunta] = useState('');
   const [enviando, setEnviando] = useState(false);
+
+  // Estados da Análise Multiagente
+  const [analiseMultiagente, setAnaliseMultiagente] = useState(null);
+  const [gerandoAnalise, setGerandoAnalise] = useState(false);
 
   // Função para buscar as transações da API .NET
   const carregarDados = async () => {
@@ -70,7 +74,33 @@ function App() {
     }
   };
 
- // Cálculos financeiros (1 = Receita, 2 = Despesa)
+  // Acionar Pipeline Multiagente (/api/Chat/analise-multiagente)
+  const handleGerarAnaliseMultiagente = async () => {
+    setGerandoAnalise(true);
+    setAnaliseMultiagente(null);
+    try {
+      const response = await fetch('https://localhost:7184/api/Chat/analise-multiagente', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({}) // <-- Envia um objeto JSON válido para o [FromBody]
+      });
+
+      if (!response.ok) {
+        const erroDetalhe = await response.text();
+        throw new Error(`Erro ${response.status}: ${erroDetalhe}`);
+      }
+      
+      const data = await response.json();
+      setAnaliseMultiagente(data);
+    } catch (err) {
+      alert(`Falha na análise: ${err.message}`);
+      console.error(err);
+    } finally {
+      setGerandoAnalise(false);
+    }
+  };
+
+  // Cálculos financeiros (1 = Receita, 2 = Despesa)
   const receitas = transacoes
     .filter((t) => t.tipo === 1 || t.tipo === 'Receita')
     .reduce((acc, t) => acc + t.valor, 0);
@@ -193,6 +223,52 @@ function App() {
             </button>
           </form>
         </div>
+      </section>
+
+      {/* Seção de Consultoria Multiagente */}
+      <section className="section-multiagente">
+        <div className="multiagente-header">
+          <div>
+            <h2>🧠 Consultoria Financeira Multiagente</h2>
+            <p className="subtitulo">Orquestração autônoma com 3 especialistas de IA analisando sua carteira.</p>
+          </div>
+          <button 
+            className="btn-multiagente" 
+            onClick={handleGerarAnaliseMultiagente}
+            disabled={gerandoAnalise}
+          >
+            <BrainCircuit size={20} />
+            {gerandoAnalise ? 'Executando Agentes...' : 'Gerar Diagnóstico Completo'}
+          </button>
+        </div>
+
+        {analiseMultiagente && (
+          <div className="grid-agentes">
+            <div className="card-agente perfil">
+              <div className="agente-titulo">
+                <PieChart size={22} />
+                <h3>1. Analista de Perfil</h3>
+              </div>
+              <p>{analiseMultiagente.perfilFinanceiroIdentificado}</p>
+            </div>
+
+            <div className="card-agente risco">
+              <div className="agente-titulo">
+                <ShieldAlert size={22} />
+                <h3>2. Analista de Risco</h3>
+              </div>
+              <p>{analiseMultiagente.avaliacaoRiscoEConsumo}</p>
+            </div>
+
+            <div className="card-agente recomendacao">
+              <div className="agente-titulo">
+                <Lightbulb size={22} />
+                <h3>3. Consultor de Estratégia</h3>
+              </div>
+              <p>{analiseMultiagente.recomendacoesEstrategicas}</p>
+            </div>
+          </div>
+        )}
       </section>
     </div>
   );
