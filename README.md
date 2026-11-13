@@ -30,22 +30,9 @@ O sistema resolve a complexidade no acompanhamento financeiro pessoal, substitui
 
 A solução é estruturada em camadas estritas baseadas em **Clean Architecture**, garantindo testabilidade, baixo acoplamento e independência de infraestrutura.
 
-```
-              │   ControleFinanceiro   │
-              │          .API          │
-              └───────────┬────────────┘
-                          │
-              ┌───────────▼────────────┐
-              │   ControleFinanceiro   │
-              │      .Application      │
-              └───────────┬────────────┘
-                          │___________________________________________________
-                          │                         │                         │
-              ┌───────────▼────────────┐┌───────────▼────────────┐┌───────────▼────────────┐
-              │   ControleFinanceiro   ││   ControleFinanceiro   ││   ControleFinanceiro   │
-              │      .Domain           ││      .Infrastructure   ││      .AIServices       │
-              └────────────────────────┘└────────────────────────┘└────────────────────────┘
-```
+<p align="center">
+  <img src="docs/assets/arquitetura.jpg" alt="Consultoria Multiagente" width="800">
+</p>
 
 ### Stack Tecnológica:
 * **Linguagem & Runtime:** .NET 8 / C# 12
