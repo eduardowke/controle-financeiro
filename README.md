@@ -175,9 +175,9 @@ Fluxo de colaboração sequencial entre três agentes autônomos especializados:
    ## 📸 Interface Visual (Dashboard & Agentes de IA)
 
 <p align="center">
-  <img src="docs/assets/dashboard-chat.png" alt="Dashboard Financeiro e Chat IA" width="800">
+  <img src="docs/assets/dashboard-chat.jpg" alt="Dashboard Financeiro e Chat IA" width="800">
 </p>
 
 <p align="center">
-  <img src="docs/assets/painel-multiagente.png" alt="Consultoria Multiagente" width="800">
+  <img src="docs/assets/painel-multiagente.jpg" alt="Consultoria Multiagente" width="800">
 </p>
