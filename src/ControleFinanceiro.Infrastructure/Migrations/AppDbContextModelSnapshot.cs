@@ -22,6 +22,220 @@ namespace ControleFinanceiro.Infrastructure.Migrations
 
             SqlServerModelBuilderExtensions.UseIdentityColumns(modelBuilder);
 
+            modelBuilder.Entity("ControleFinanceiro.Domain.Banco", b =>
+                {
+                    b.Property<string>("NumBanco")
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)")
+                        .IsFixedLength(false);
+
+                    b.Property<string>("LogoUrl")
+                        .HasMaxLength(255)
+                        .HasColumnType("nvarchar(255)");
+
+                    b.Property<string>("NomeReduzido")
+                        .IsRequired()
+                        .HasMaxLength(50)
+                        .HasColumnType("nvarchar(50)");
+
+                    b.Property<string>("RazaoSocial")
+                        .IsRequired()
+                        .HasMaxLength(150)
+                        .HasColumnType("nvarchar(150)");
+
+                    b.HasKey("NumBanco");
+
+                    b.ToTable("Bancos");
+
+                    b.HasData(
+                        new
+                        {
+                            NumBanco = "001",
+                            NomeReduzido = "Banco do Brasil",
+                            RazaoSocial = "BANCO DO BRASIL S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "003",
+                            NomeReduzido = "Banco da Amazônia",
+                            RazaoSocial = "BANCO DA AMAZÔNIA S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "004",
+                            NomeReduzido = "Banco do Nordeste",
+                            RazaoSocial = "BANCO DO NORDESTE DO BRASIL S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "033",
+                            NomeReduzido = "Santander",
+                            RazaoSocial = "BANCO SANTANDER (BRASIL) S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "041",
+                            NomeReduzido = "Banrisul",
+                            RazaoSocial = "BANCO DO ESTADO DO RIO GRANDE DO SUL S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "070",
+                            NomeReduzido = "BRB",
+                            RazaoSocial = "BRB - BANCO DE BRASÍLIA S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "077",
+                            NomeReduzido = "Inter",
+                            RazaoSocial = "BANCO INTER S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "104",
+                            NomeReduzido = "Caixa",
+                            RazaoSocial = "CAIXA ECONÔMICA FEDERAL"
+                        },
+                        new
+                        {
+                            NumBanco = "197",
+                            NomeReduzido = "Stone",
+                            RazaoSocial = "STONE INSTITUIÇÃO DE PAGAMENTO S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "208",
+                            NomeReduzido = "BTG Pactual",
+                            RazaoSocial = "BANCO BTG PACTUAL S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "212",
+                            NomeReduzido = "Banco Original",
+                            RazaoSocial = "BANCO ORIGINAL S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "218",
+                            NomeReduzido = "BS2",
+                            RazaoSocial = "BANCO BS2 S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "237",
+                            NomeReduzido = "Bradesco",
+                            RazaoSocial = "BANCO BRADESCO S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "260",
+                            NomeReduzido = "Nubank",
+                            RazaoSocial = "NU PAGAMENTOS S.A. - INSTITUIÇÃO DE PAGAMENTO"
+                        },
+                        new
+                        {
+                            NumBanco = "290",
+                            NomeReduzido = "PagBank",
+                            RazaoSocial = "PAGSEGURO INTERNET INSTITUIÇÃO DE PAGAMENTO S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "318",
+                            NomeReduzido = "BMG",
+                            RazaoSocial = "BANCO BMG S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "323",
+                            NomeReduzido = "Mercado Pago",
+                            RazaoSocial = "MERCADO PAGO INSTITUIÇÃO DE PAGAMENTO LTDA."
+                        },
+                        new
+                        {
+                            NumBanco = "336",
+                            NomeReduzido = "C6 Bank",
+                            RazaoSocial = "BANCO C6 S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "341",
+                            NomeReduzido = "Itaú",
+                            RazaoSocial = "ITAÚ UNIBANCO S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "380",
+                            NomeReduzido = "PicPay",
+                            RazaoSocial = "PICPAY INSTITUIÇÃO DE PAGAMENTO S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "403",
+                            NomeReduzido = "Cora",
+                            RazaoSocial = "CORA SOCIEDADE DE CRÉDITO DIRETO S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "422",
+                            NomeReduzido = "Safra",
+                            RazaoSocial = "BANCO SAFRA S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "536",
+                            NomeReduzido = "Neon",
+                            RazaoSocial = "NEON PAGAMENTOS S.A. INSTITUIÇÃO DE PAGAMENTO"
+                        },
+                        new
+                        {
+                            NumBanco = "623",
+                            NomeReduzido = "Banco Pan",
+                            RazaoSocial = "BANCO PAN S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "637",
+                            NomeReduzido = "Sofisa Direto",
+                            RazaoSocial = "BANCO SOFISA S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "655",
+                            NomeReduzido = "Votorantim / BV",
+                            RazaoSocial = "BANCO VOTORANTIM S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "707",
+                            NomeReduzido = "Daycoval",
+                            RazaoSocial = "BANCO DAYCOVAL S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "745",
+                            NomeReduzido = "Citibank",
+                            RazaoSocial = "BANCO CITIBANK S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "748",
+                            NomeReduzido = "Sicredi",
+                            RazaoSocial = "BANCO COOPERATIVO SICREDI S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "756",
+                            NomeReduzido = "Sicoob",
+                            RazaoSocial = "BANCO COOPERATIVO SICOOB S.A."
+                        },
+                        new
+                        {
+                            NumBanco = "999",
+                            NomeReduzido = "Outros / Carteira",
+                            RazaoSocial = "OUTRAS INSTITUIÇÕES OU CARTEIRA FÍSICA"
+                        });
+                });
+
             modelBuilder.Entity("ControleFinanceiro.Domain.Categoria", b =>
                 {
                     b.Property<int>("Id")
@@ -41,6 +255,11 @@ namespace ControleFinanceiro.Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<int>("TipoCategoria")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("int")
+                        .HasDefaultValue(2);
+
                     b.HasKey("Id");
 
                     b.ToTable("Categorias");
@@ -54,18 +273,51 @@ namespace ControleFinanceiro.Infrastructure.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<string>("Agencia")
+                        .HasMaxLength(10)
+                        .HasColumnType("nvarchar(10)");
+
+                    b.Property<bool>("Ativa")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("bit")
+                        .HasDefaultValue(true);
+
                     b.Property<DateTime>("DataCriacao")
                         .HasColumnType("datetime2");
 
                     b.Property<string>("Nome")
                         .IsRequired()
-                        .HasColumnType("nvarchar(max)");
+                        .HasMaxLength(80)
+                        .HasColumnType("nvarchar(80)");
+
+                    b.Property<string>("NumBanco")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(3)
+                        .HasColumnType("nvarchar(3)")
+                        .HasDefaultValue("999");
+
+                    b.Property<string>("NumConta")
+                        .HasMaxLength(20)
+                        .HasColumnType("nvarchar(20)");
 
                     b.Property<decimal>("SaldoInicial")
                         .HasPrecision(18, 2)
                         .HasColumnType("decimal(18,2)");
 
+                    b.Property<int>("TipoConta")
+                        .HasColumnType("int");
+
+                    b.Property<string>("Titular")
+                        .IsRequired()
+                        .ValueGeneratedOnAdd()
+                        .HasMaxLength(100)
+                        .HasColumnType("nvarchar(100)")
+                        .HasDefaultValue("Titular Padrão");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("NumBanco");
 
                     b.ToTable("Contas");
                 });
@@ -116,6 +368,17 @@ namespace ControleFinanceiro.Infrastructure.Migrations
                     b.ToTable("Transacoes");
                 });
 
+            modelBuilder.Entity("ControleFinanceiro.Domain.Conta", b =>
+                {
+                    b.HasOne("ControleFinanceiro.Domain.Banco", "Banco")
+                        .WithMany("Contas")
+                        .HasForeignKey("NumBanco")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("Banco");
+                });
+
             modelBuilder.Entity("ControleFinanceiro.Domain.Transacao", b =>
                 {
                     b.HasOne("ControleFinanceiro.Domain.Categoria", "Categoria")
@@ -133,6 +396,11 @@ namespace ControleFinanceiro.Infrastructure.Migrations
                     b.Navigation("Categoria");
 
                     b.Navigation("Conta");
+                });
+
+            modelBuilder.Entity("ControleFinanceiro.Domain.Banco", b =>
+                {
+                    b.Navigation("Contas");
                 });
 
             modelBuilder.Entity("ControleFinanceiro.Domain.Categoria", b =>

@@ -6,7 +6,7 @@ public class Categoria
     public string Nome { get; set; } = string.Empty;
     public string Descricao { get; set; } = string.Empty;
     public bool IsReceita { get; set; }
+    public TipoCategoria TipoCategoria { get; set; } = TipoCategoria.Despesa;
 
-    // Relacionamento com Transações
     public ICollection<Transacao> Transacoes { get; set; } = new List<Transacao>();
 }

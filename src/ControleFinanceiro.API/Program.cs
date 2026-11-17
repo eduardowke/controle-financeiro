@@ -15,6 +15,7 @@ builder.Services.AddDbContext<AppDbContext>(options =>
 
 // Registro dos Serviços de Domínio e Infraestrutura na Injeção de Dependência
 builder.Services.AddScoped<IContaService, ContaService>();
+builder.Services.AddScoped<IBancoService, BancoService>();
 builder.Services.AddScoped<ITransacaoService, TransacaoService>();
 builder.Services.AddScoped<ICategoriaService, CategoriaService>();
 builder.Services.AddScoped<IAICategorizationService, AICategorizationService>();
@@ -78,16 +79,62 @@ app.MapControllers();
 app.MapGet("/", () => "API do Controle Financeiro Rodando!");
 
 // --- ENDPOINTS DE CONTAS ---
-app.MapPost("/api/contas", async (CriarContaDto dto, IContaService service) =>
+// --- ENDPOINTS DE BANCOS ---
+app.MapGet("/api/bancos", async (string? filtro, IBancoService service) =>
 {
-    var conta = await service.CriarAsync(dto);
-    return Results.Created($"/api/contas/{conta.Id}", conta);
+    var bancos = await service.ObterTodosAsync(filtro);
+    return Results.Ok(bancos);
 });
 
-app.MapGet("/api/contas", async (IContaService service) =>
+app.MapGet("/api/bancos/{numBanco}", async (string numBanco, IBancoService service) =>
 {
-    var contas = await service.ObterTodasAsync();
+    var banco = await service.ObterPorNumeroAsync(numBanco);
+    return banco is null ? Results.NotFound("Banco não encontrado.") : Results.Ok(banco);
+});
+
+// --- ENDPOINTS DE CONTAS ---
+app.MapPost("/api/contas", async (CriarContaDto dto, IContaService service) =>
+{
+    try
+    {
+        var conta = await service.CriarAsync(dto);
+        return Results.Created($"/api/contas/{conta.Id}", conta);
+    }
+    catch (ArgumentException ex)
+    {
+        return Results.BadRequest(new { erro = ex.Message });
+    }
+});
+
+app.MapGet("/api/contas", async (bool? incluirInativas, IContaService service) =>
+{
+    var contas = await service.ObterTodasAsync(incluirInativas ?? false);
     return Results.Ok(contas);
+});
+
+app.MapGet("/api/contas/{id:int}", async (int id, IContaService service) =>
+{
+    var conta = await service.ObterPorIdAsync(id);
+    return conta is null ? Results.NotFound("Conta não encontrada.") : Results.Ok(conta);
+});
+
+app.MapPut("/api/contas/{id:int}", async (int id, AtualizarContaDto dto, IContaService service) =>
+{
+    try
+    {
+        var conta = await service.AtualizarAsync(id, dto);
+        return conta is null ? Results.NotFound("Conta não encontrada.") : Results.Ok(conta);
+    }
+    catch (ArgumentException ex)
+    {
+        return Results.BadRequest(new { erro = ex.Message });
+    }
+});
+
+app.MapPatch("/api/contas/{id:int}/status", async (int id, bool ativa, IContaService service) =>
+{
+    var atualizado = await service.AlterarStatusAsync(id, ativa);
+    return atualizado ? Results.NoContent() : Results.NotFound("Conta não encontrada.");
 });
 
 // --- ENDPOINTS DE CATEGORIAS ---
