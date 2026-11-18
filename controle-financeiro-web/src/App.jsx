@@ -1,15 +1,33 @@
 import { useState, useEffect } from 'react';
-import { Wallet, TrendingUp, TrendingDown, RefreshCw, Send, Bot, User, BrainCircuit, ShieldAlert, Lightbulb, PieChart } from 'lucide-react';
+import {
+  Wallet,
+  TrendingUp,
+  TrendingDown,
+  RefreshCw,
+  Send,
+  Bot,
+  User,
+  BrainCircuit,
+  ShieldAlert,
+  Lightbulb,
+  PieChart,
+  Plus,
+  Landmark,
+} from 'lucide-react';
+import { api } from './services/api';
+import { ModalCadastroConta } from './components/ModalCadastroConta';
 import './App.css';
 
 function App() {
+  const [contas, setContas] = useState([]);
   const [transacoes, setTransacoes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(null);
+  const [modalContaAberto, setModalContaAberto] = useState(false);
 
   // Estados do Chat
   const [mensagens, setMensagens] = useState([
-    { autor: 'bot', texto: 'Olá! Sou seu assistente financeiro. Como posso ajudar você hoje?' }
+    { autor: 'bot', texto: 'Olá! Sou seu assistente financeiro. Como posso ajudar você hoje?' },
   ]);
   const [pergunta, setPergunta] = useState('');
   const [enviando, setEnviando] = useState(false);
@@ -18,17 +36,19 @@ function App() {
   const [analiseMultiagente, setAnaliseMultiagente] = useState(null);
   const [gerandoAnalise, setGerandoAnalise] = useState(false);
 
-  // Função para buscar as transações da API .NET
+  // Carrega contas e transações da API .NET
   const carregarDados = async () => {
     setLoading(true);
     setErro(null);
     try {
-      const response = await fetch('https://localhost:7184/api/Transacoes');
-      if (!response.ok) throw new Error('Falha ao conectar com a API');
-      const data = await response.json();
-      setTransacoes(data);
+      const [listaContas, listaTransacoes] = await Promise.all([
+        api.listarContas(),
+        api.listarTransacoes(),
+      ]);
+      setContas(listaContas);
+      setTransacoes(listaTransacoes);
     } catch (err) {
-      setErro('Certifique-se de que a API .NET está rodando em https://localhost:7184');
+      setErro(`Certifique-se de que a API .NET está rodando em ${api.baseUrl}`);
       console.error(err);
     } finally {
       setLoading(false);
@@ -38,6 +58,10 @@ function App() {
   useEffect(() => {
     carregarDados();
   }, []);
+
+  const handleContaSalva = (novaConta) => {
+    setContas((prev) => [...prev, novaConta].sort((a, b) => a.nome.localeCompare(b.nome)));
+  };
 
   // Enviar Pergunta para a IA (/api/Chat/perguntar)
   const handleEnviarPergunta = async (e) => {
@@ -50,23 +74,20 @@ function App() {
     setEnviando(true);
 
     try {
-      const response = await fetch('https://localhost:7184/api/Chat/perguntar', {
+      const response = await fetch(`${api.baseUrl}/Chat/perguntar`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({ mensagem: textoUsuario }),
       });
 
       if (!response.ok) throw new Error('Erro ao obter resposta da IA');
-      
+
       const data = await response.json();
-      setMensagens((prev) => [
-        ...prev,
-        { autor: 'bot', texto: data.resposta || data }
-      ]);
+      setMensagens((prev) => [...prev, { autor: 'bot', texto: data.resposta || data }]);
     } catch (err) {
       setMensagens((prev) => [
         ...prev,
-        { autor: 'bot', texto: 'Desculpe, ocorreu um erro ao se comunicar com a IA.' }
+        { autor: 'bot', texto: 'Desculpe, ocorreu um erro ao se comunicar com a IA.' },
       ]);
       console.error(err);
     } finally {
@@ -79,17 +100,17 @@ function App() {
     setGerandoAnalise(true);
     setAnaliseMultiagente(null);
     try {
-      const response = await fetch('https://localhost:7184/api/Chat/analise-multiagente', {
+      const response = await fetch(`${api.baseUrl}/Chat/analise-multiagente`, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({}) // <-- Envia um objeto JSON válido para o [FromBody]
+        body: JSON.stringify({}),
       });
 
       if (!response.ok) {
         const erroDetalhe = await response.text();
         throw new Error(`Erro ${response.status}: ${erroDetalhe}`);
       }
-      
+
       const data = await response.json();
       setAnaliseMultiagente(data);
     } catch (err) {
@@ -115,12 +136,30 @@ function App() {
     <div className="container">
       <header className="header">
         <h1>💰 Controle Financeiro IA</h1>
-        <button className="btn-refresh" onClick={carregarDados}>
-          <RefreshCw size={18} /> Atualizar
-        </button>
+        <div className="header-acoes">
+          <button className="btn-primario" onClick={() => setModalContaAberto(true)}>
+            <Plus size={18} /> Nova Conta
+          </button>
+          <button className="btn-refresh" onClick={carregarDados}>
+            <RefreshCw size={18} /> Atualizar
+          </button>
+        </div>
       </header>
 
       {erro && <div className="card-erro">{erro}</div>}
+
+      {/* Contas Cadastradas */}
+      {contas.length > 0 && (
+        <div className="contas-resumo-bar">
+          {contas.map((c) => (
+            <div key={c.id} className="conta-pill">
+              <Landmark size={16} color="#00b37e" />
+              <strong>{c.nome}</strong>
+              <span className="conta-pill-tipo">{c.tipoContaDescricao}</span>
+            </div>
+          ))}
+        </div>
+      )}
 
       {/* Cartões de Resumo */}
       <div className="grid-cards">
@@ -204,7 +243,9 @@ function App() {
             ))}
             {enviando && (
               <div className="msg-wrapper bot">
-                <div className="avatar"><Bot size={20} /></div>
+                <div className="avatar">
+                  <Bot size={20} />
+                </div>
                 <div className="balao-msg digitando">Pensando...</div>
               </div>
             )}
@@ -230,10 +271,12 @@ function App() {
         <div className="multiagente-header">
           <div>
             <h2>🧠 Consultoria Financeira Multiagente</h2>
-            <p className="subtitulo">Orquestração autônoma com 3 especialistas de IA analisando sua carteira.</p>
+            <p className="subtitulo">
+              Orquestração autônoma com 3 especialistas de IA analisando sua carteira.
+            </p>
           </div>
-          <button 
-            className="btn-multiagente" 
+          <button
+            className="btn-multiagente"
             onClick={handleGerarAnaliseMultiagente}
             disabled={gerandoAnalise}
           >
@@ -270,6 +313,13 @@ function App() {
           </div>
         )}
       </section>
+
+      {/* Modal de Cadastro de Conta (US 266) */}
+      <ModalCadastroConta
+        aberto={modalContaAberto}
+        onFechar={() => setModalContaAberto(false)}
+        onContaSalva={handleContaSalva}
+      />
     </div>
   );
 }

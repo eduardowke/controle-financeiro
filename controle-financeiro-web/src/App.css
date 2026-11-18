@@ -311,3 +311,224 @@ body {
 .card-agente.perfil .agente-titulo { color: #04d361; }
 .card-agente.risco .agente-titulo { color: #fba94c; }
 .card-agente.recomendacao .agente-titulo { color: #8257e5; }
+/* Botões de Ação no Header */
+.header-acoes {
+  display: flex;
+  gap: 0.8rem;
+  align-items: center;
+}
+
+.btn-primario {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background-color: #00b37e;
+  color: #fff;
+  border: none;
+  padding: 0.65rem 1.2rem;
+  border-radius: 6px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background-color 0.2s;
+}
+
+.btn-primario:hover:not(:disabled) {
+  background-color: #00875f;
+}
+
+.btn-primario:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+.btn-secundario {
+  background-color: #29292e;
+  color: #e1e1e6;
+  border: 1px solid #323238;
+  padding: 0.65rem 1.2rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.btn-secundario:hover {
+  background-color: #323238;
+}
+
+/* Badges de Contas Cadastradas */
+.contas-resumo-bar {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+  margin-bottom: 1.8rem;
+}
+
+.conta-pill {
+  background-color: #202024;
+  border: 1px solid #323238;
+  padding: 0.6rem 1rem;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  font-size: 0.9rem;
+}
+
+.conta-pill-tipo {
+  font-size: 0.75rem;
+  color: #a8a8b3;
+  background-color: #29292e;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+/* Modal de Cadastro de Conta */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background-color: rgba(0, 0, 0, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  padding: 1rem;
+}
+
+.modal-card {
+  background-color: #202024;
+  border: 1px solid #323238;
+  border-radius: 10px;
+  width: 100%;
+  max-width: 500px;
+  padding: 1.8rem;
+  box-shadow: 0 12px 32px rgba(0, 0, 0, 0.5);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.4rem;
+}
+
+.modal-titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+}
+
+.modal-titulo h2 {
+  margin: 0;
+  font-size: 1.25rem;
+}
+
+.btn-fechar-modal {
+  background: transparent;
+  border: none;
+  color: #a8a8b3;
+  cursor: pointer;
+  padding: 0.3rem;
+  display: flex;
+}
+
+.btn-fechar-modal:hover {
+  color: #fff;
+}
+
+.form-modal {
+  display: flex;
+  flex-direction: column;
+  gap: 1.1rem;
+}
+
+.form-grupo {
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.form-grupo label {
+  font-size: 0.88rem;
+  color: #c4c4cc;
+  font-weight: 500;
+}
+
+.form-grupo input,
+.form-grupo select {
+  background-color: #121214;
+  border: 1px solid #323238;
+  color: #e1e1e6;
+  padding: 0.7rem 0.9rem;
+  border-radius: 6px;
+  font-size: 0.95rem;
+}
+
+.form-grupo input:focus,
+.form-grupo select:focus {
+  outline: none;
+  border-color: #00b37e;
+}
+
+.form-linha-dupla {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.tipo-conta-selector {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0.5rem;
+}
+
+.tipo-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  background-color: #121214;
+  border: 1px solid #323238;
+  color: #a8a8b3;
+  padding: 0.6rem 0.4rem;
+  border-radius: 6px;
+  font-size: 0.82rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.tipo-btn:hover {
+  border-color: #505059;
+  color: #e1e1e6;
+}
+
+.tipo-btn.ativo {
+  background-color: #00b37e22;
+  border-color: #00b37e;
+  color: #00b37e;
+  font-weight: 600;
+}
+
+.label-com-dica {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.badge-sugestao {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  color: #00b37e;
+  background-color: #00b37e18;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+}
+
+.modal-footer {
+  display: flex;
+  justify-content: flex-end;
+  gap: 0.8rem;
+  margin-top: 0.8rem;
+  padding-top: 1rem;
+  border-top: 1px solid #323238;
+}
