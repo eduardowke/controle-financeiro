@@ -48,4 +48,5 @@ public class BancoService(AppDbContext context) : IBancoService
             LogoUrl = banco.LogoUrl
         };
     }
+
 }

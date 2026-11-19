@@ -532,3 +532,180 @@ body {
   padding-top: 1rem;
   border-top: 1px solid #323238;
 }
+/* =========================================================
+   US 267: Dashboard de Liquidez, Projeção e Cartões
+   ========================================================= */
+.dashboard-contas {
+  margin-bottom: 2.8rem;
+}
+
+.projecao-bar {
+  background-color: #202024;
+  border: 1px solid #323238;
+  border-radius: 8px;
+  padding: 1rem 1.4rem;
+  margin-bottom: 1.5rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.projecao-titulo {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+}
+
+.projecao-sub {
+  display: block;
+  font-size: 0.82rem;
+  color: #a8a8b3;
+  margin-top: 0.15rem;
+}
+
+.projecao-controles {
+  display: flex;
+  align-items: center;
+  gap: 0.8rem;
+  flex-wrap: wrap;
+}
+
+.atalhos-data {
+  display: flex;
+  gap: 0.4rem;
+  flex-wrap: wrap;
+}
+
+.atalhos-data button {
+  background-color: #29292e;
+  border: 1px solid #323238;
+  color: #c4c4cc;
+  padding: 0.4rem 0.7rem;
+  border-radius: 5px;
+  font-size: 0.8rem;
+  cursor: pointer;
+  transition: all 0.15s;
+}
+
+.atalhos-data button:hover {
+  border-color: #00b37e;
+  color: #fff;
+}
+
+.input-data-corte {
+  background-color: #121214;
+  border: 1px solid #323238;
+  color: #e1e1e6;
+  padding: 0.45rem 0.75rem;
+  border-radius: 6px;
+  font-size: 0.9rem;
+  color-scheme: dark;
+}
+
+.input-data-corte:focus {
+  outline: none;
+  border-color: #00b37e;
+}
+
+.grid-cards-dashboard {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 1.2rem;
+  margin-bottom: 2rem;
+}
+
+.grid-cards-dashboard .card h2 {
+  font-size: 1.55rem;
+  margin-bottom: 0.4rem;
+}
+
+.card.projetado {
+  border-color: #00b37e55;
+}
+
+.card.cartao h2 {
+  color: #fba94c;
+}
+
+.card-rodape {
+  font-size: 0.8rem;
+  color: #a8a8b3;
+}
+
+.fluxo-linhas {
+  display: flex;
+  flex-direction: column;
+  gap: 0.35rem;
+  margin-bottom: 0.5rem;
+}
+
+.fluxo-item {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 0.95rem;
+  font-weight: 600;
+}
+
+.fluxo-item.receita {
+  color: #00b37e;
+}
+
+.fluxo-item.despesa {
+  color: #f75a68;
+}
+
+.bloco-contas {
+  margin-top: 1.8rem;
+}
+
+.bloco-contas h3 {
+  display: flex;
+  align-items: center;
+  gap: 0.55rem;
+  margin-bottom: 0.8rem;
+  font-size: 1.1rem;
+}
+
+.subtexto-tabela {
+  font-size: 0.8rem;
+  color: #a8a8b3;
+  margin-top: 0.15rem;
+}
+
+.texto-positivo {
+  color: #00b37e;
+}
+
+.texto-negativo {
+  color: #f75a68;
+}
+
+.texto-alerta {
+  color: #fba94c;
+}
+
+.texto-vazio {
+  color: #a8a8b3;
+  font-size: 0.92rem;
+}
+
+.badge-pendente {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.3rem;
+  font-size: 0.75rem;
+  color: #fba94c;
+  background-color: #fba94c18;
+  padding: 0.15rem 0.5rem;
+  border-radius: 4px;
+  margin-top: 0.25rem;
+}
+
+.tag-pendente {
+  background-color: #fba94c22;
+  color: #fba94c;
+  margin-left: 0.4rem;
+}

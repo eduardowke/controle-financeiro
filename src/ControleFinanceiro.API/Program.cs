@@ -111,6 +111,11 @@ app.MapGet("/api/contas", async (bool? incluirInativas, IContaService service) =
     var contas = await service.ObterTodasAsync(incluirInativas ?? false);
     return Results.Ok(contas);
 });
+app.MapGet("/api/contas/resumo-dashboard", async (DateTime? dataCorte, IContaService service) =>
+{
+    var resumo = await service.ObterResumoDashboardAsync(dataCorte);
+    return Results.Ok(resumo);
+});
 
 app.MapGet("/api/contas/{id:int}", async (int id, IContaService service) =>
 {

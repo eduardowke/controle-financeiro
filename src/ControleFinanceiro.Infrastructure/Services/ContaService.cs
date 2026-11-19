@@ -138,4 +138,127 @@ public class ContaService(AppDbContext context) : IContaService
         SaldoInicial = c.SaldoInicial,
         Ativa = c.Ativa
     };
+   public async Task<DashboardContasDto> ObterResumoDashboardAsync(DateTime? dataCorte = null)
+    {
+        var corte = (dataCorte ?? DateTime.Today).Date;
+        var inicioMes = new DateTime(corte.Year, corte.Month, 1);
+
+        var contas = await context.Contas
+            .Include(c => c.Banco)
+            .Where(c => c.Ativa)
+            .OrderBy(c => c.Nome)
+            .AsNoTracking()
+            .ToListAsync();
+
+        var transacoes = await context.Transacoes
+            .Include(t => t.Categoria)
+            .AsNoTracking()
+            .ToListAsync();
+
+        var dashboard = new DashboardContasDto { DataCorte = corte };
+
+        foreach (var conta in contas)
+        {
+            var transacoesConta = transacoes.Where(t => t.ContaId == conta.Id).ToList();
+            var isCartao = conta.TipoConta == TipoConta.CartaoCredito;
+
+            // 1. Compensadas (DataCompensacao != null) -> compõem o Saldo/Fatura Atual
+            var compensadas = transacoesConta.Where(t => t.DataCompensacao.HasValue).ToList();
+
+            // 2. Pendentes (DataCompensacao == null) com Data prevista até a DataCorte -> compõem a Projeção
+            var pendentesAteCorte = transacoesConta
+                .Where(t => !t.DataCompensacao.HasValue && t.Data.Date <= corte)
+                .ToList();
+
+            decimal saldoAtual;
+            decimal saldoProjetado;
+
+            if (!isCartao)
+            {
+                // Conta Corrente / Investimento: Receita soma, Despesa subtrai
+                var movCompensada = compensadas.Sum(t => t.Tipo == TipoTransacao.Receita ? t.Valor : -t.Valor);
+                var movPendente = pendentesAteCorte.Sum(t => t.Tipo == TipoTransacao.Receita ? t.Valor : -t.Valor);
+
+                saldoAtual = conta.SaldoInicial + movCompensada;
+                saldoProjetado = saldoAtual + movPendente;
+            }
+            else
+            {
+                // Cartão de Crédito: Despesa aumenta a fatura, Receita/Pagamento de Fatura reduz a fatura
+                var movCompensada = compensadas.Sum(t => t.Tipo == TipoTransacao.Despesa ? t.Valor : -t.Valor);
+                var movPendente = pendentesAteCorte.Sum(t => t.Tipo == TipoTransacao.Despesa ? t.Valor : -t.Valor);
+
+                saldoAtual = conta.SaldoInicial + movCompensada;
+                saldoProjetado = saldoAtual + movPendente;
+            }
+
+            var itemDto = new ContaSaldoDto
+            {
+                Id = conta.Id,
+                Nome = conta.Nome,
+                NumBanco = conta.NumBanco,
+                NomeBanco = conta.Banco?.NomeReduzido ?? "Não informado",
+                TipoConta = conta.TipoConta,
+                TipoContaDescricao = conta.TipoConta switch
+                {
+                    TipoConta.ContaCorrente => "Conta Corrente",
+                    TipoConta.ContaInvestimento => "Conta Investimento",
+                    TipoConta.CartaoCredito => "Cartão de Crédito",
+                    _ => "Outros"
+                },
+                Titular = conta.Titular,
+                Agencia = conta.Agencia,
+                NumConta = conta.NumConta,
+                Ativa = conta.Ativa,
+                SaldoInicial = conta.SaldoInicial,
+                SaldoAtual = saldoAtual,
+                SaldoProjetado = saldoProjetado,
+                LancamentosPendentesAteCorte = pendentesAteCorte.Count
+            };
+
+            if (isCartao)
+                dashboard.CartoesCredito.Add(itemDto);
+            else
+                dashboard.ContasBancarias.Add(itemDto);
+        }
+
+        dashboard.LiquidezAtual = dashboard.ContasBancarias.Sum(c => c.SaldoAtual);
+        dashboard.LiquidezProjetada = dashboard.ContasBancarias.Sum(c => c.SaldoProjetado);
+
+        dashboard.FaturaCartoesAtual = dashboard.CartoesCredito.Sum(c => c.SaldoAtual);
+        dashboard.FaturaCartoesProjetada = dashboard.CartoesCredito.Sum(c => c.SaldoProjetado);
+
+        // Indicadores globais do mês da data de corte (ignorando Categorias Neutras = 3)
+        var transacoesNaoNeutras = transacoes
+            .Where(t => t.Categoria == null || t.Categoria.TipoCategoria != TipoCategoria.Neutra)
+            .ToList();
+
+        dashboard.ReceitasRealizadasPeriodo = transacoesNaoNeutras
+            .Where(t => t.DataCompensacao.HasValue
+                     && t.DataCompensacao.Value.Date >= inicioMes
+                     && t.DataCompensacao.Value.Date <= corte
+                     && t.Tipo == TipoTransacao.Receita)
+            .Sum(t => t.Valor);
+
+        dashboard.DespesasRealizadasPeriodo = transacoesNaoNeutras
+            .Where(t => t.DataCompensacao.HasValue
+                     && t.DataCompensacao.Value.Date >= inicioMes
+                     && t.DataCompensacao.Value.Date <= corte
+                     && t.Tipo == TipoTransacao.Despesa)
+            .Sum(t => t.Valor);
+
+        dashboard.ReceitasPrevistasPeriodo = transacoesNaoNeutras
+            .Where(t => !t.DataCompensacao.HasValue
+                     && t.Data.Date <= corte
+                     && t.Tipo == TipoTransacao.Receita)
+            .Sum(t => t.Valor);
+
+        dashboard.DespesasPrevistasPeriodo = transacoesNaoNeutras
+            .Where(t => !t.DataCompensacao.HasValue
+                     && t.Data.Date <= corte
+                     && t.Tipo == TipoTransacao.Despesa)
+            .Sum(t => t.Valor);
+
+        return dashboard;
+    } 
 }

@@ -342,6 +342,9 @@ namespace ControleFinanceiro.Infrastructure.Migrations
                     b.Property<DateTime>("Data")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime?>("DataCompensacao")
+                        .HasColumnType("datetime2");
+
                     b.Property<DateTime>("DataCriacao")
                         .HasColumnType("datetime2");
 

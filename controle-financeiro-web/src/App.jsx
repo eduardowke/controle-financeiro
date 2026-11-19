@@ -1,8 +1,5 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import {
-  Wallet,
-  TrendingUp,
-  TrendingDown,
   RefreshCw,
   Send,
   Bot,
@@ -12,14 +9,21 @@ import {
   Lightbulb,
   PieChart,
   Plus,
-  Landmark,
 } from 'lucide-react';
 import { api } from './services/api';
 import { ModalCadastroConta } from './components/ModalCadastroConta';
+import { DashboardContas } from './components/DashboardContas';
 import './App.css';
 
+function obterFimDoMesAtualISO() {
+  const hoje = new Date();
+  const fimMes = new Date(hoje.getFullYear(), hoje.getMonth() + 1, 0);
+  return fimMes.toISOString().split('T')[0];
+}
+
 function App() {
-  const [contas, setContas] = useState([]);
+  const [dataCorte, setDataCorte] = useState(obterFimDoMesAtualISO);
+  const [resumoDashboard, setResumoDashboard] = useState(null);
   const [transacoes, setTransacoes] = useState([]);
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(null);
@@ -36,16 +40,16 @@ function App() {
   const [analiseMultiagente, setAnaliseMultiagente] = useState(null);
   const [gerandoAnalise, setGerandoAnalise] = useState(false);
 
-  // Carrega contas e transações da API .NET
-  const carregarDados = async () => {
+  // Carrega resumo do dashboard (com projeção) e transações
+  const carregarDados = useCallback(async (dataSelecionada = dataCorte) => {
     setLoading(true);
     setErro(null);
     try {
-      const [listaContas, listaTransacoes] = await Promise.all([
-        api.listarContas(),
+      const [resumo, listaTransacoes] = await Promise.all([
+        api.obterResumoDashboard(dataSelecionada),
         api.listarTransacoes(),
       ]);
-      setContas(listaContas);
+      setResumoDashboard(resumo);
       setTransacoes(listaTransacoes);
     } catch (err) {
       setErro(`Certifique-se de que a API .NET está rodando em ${api.baseUrl}`);
@@ -53,14 +57,14 @@ function App() {
     } finally {
       setLoading(false);
     }
-  };
+  }, [dataCorte]);
 
   useEffect(() => {
-    carregarDados();
-  }, []);
+    carregarDados(dataCorte);
+  }, [dataCorte, carregarDados]);
 
-  const handleContaSalva = (novaConta) => {
-    setContas((prev) => [...prev, novaConta].sort((a, b) => a.nome.localeCompare(b.nome)));
+  const handleContaSalva = () => {
+    carregarDados(dataCorte);
   };
 
   // Enviar Pergunta para a IA (/api/Chat/perguntar)
@@ -121,17 +125,6 @@ function App() {
     }
   };
 
-  // Cálculos financeiros (1 = Receita, 2 = Despesa)
-  const receitas = transacoes
-    .filter((t) => t.tipo === 1 || t.tipo === 'Receita')
-    .reduce((acc, t) => acc + t.valor, 0);
-
-  const despesas = transacoes
-    .filter((t) => t.tipo === 2 || t.tipo === 'Despesa')
-    .reduce((acc, t) => acc + t.valor, 0);
-
-  const saldoTotal = receitas - despesas;
-
   return (
     <div className="container">
       <header className="header">
@@ -140,7 +133,7 @@ function App() {
           <button className="btn-primario" onClick={() => setModalContaAberto(true)}>
             <Plus size={18} /> Nova Conta
           </button>
-          <button className="btn-refresh" onClick={carregarDados}>
+          <button className="btn-refresh" onClick={() => carregarDados(dataCorte)}>
             <RefreshCw size={18} /> Atualizar
           </button>
         </div>
@@ -148,45 +141,13 @@ function App() {
 
       {erro && <div className="card-erro">{erro}</div>}
 
-      {/* Contas Cadastradas */}
-      {contas.length > 0 && (
-        <div className="contas-resumo-bar">
-          {contas.map((c) => (
-            <div key={c.id} className="conta-pill">
-              <Landmark size={16} color="#00b37e" />
-              <strong>{c.nome}</strong>
-              <span className="conta-pill-tipo">{c.tipoContaDescricao}</span>
-            </div>
-          ))}
-        </div>
-      )}
-
-      {/* Cartões de Resumo */}
-      <div className="grid-cards">
-        <div className="card saldo">
-          <div className="card-header">
-            <span>Saldo Consolidado</span>
-            <Wallet size={24} />
-          </div>
-          <h2>R$ {saldoTotal.toFixed(2)}</h2>
-        </div>
-
-        <div className="card receita">
-          <div className="card-header">
-            <span>Total Receitas</span>
-            <TrendingUp size={24} />
-          </div>
-          <h2>R$ {receitas.toFixed(2)}</h2>
-        </div>
-
-        <div className="card despesa">
-          <div className="card-header">
-            <span>Total Despesas</span>
-            <TrendingDown size={24} />
-          </div>
-          <h2>R$ {despesas.toFixed(2)}</h2>
-        </div>
-      </div>
+      {/* Novo Dashboard: Liquidez Atual, Projeção por Data e Separação de Cartões (US 267) */}
+      <DashboardContas
+        resumo={resumoDashboard}
+        dataCorte={dataCorte}
+        onChangeDataCorte={setDataCorte}
+        carregando={loading}
+      />
 
       {/* Tabela de Transações */}
       <section className="section-transacoes">
@@ -199,9 +160,9 @@ function App() {
           <table className="tabela">
             <thead>
               <tr>
-                <th>Data</th>
+                <th>Data Prevista</th>
                 <th>Descrição</th>
-                <th>Tipo</th>
+                <th>Status</th>
                 <th>Valor</th>
               </tr>
             </thead>
@@ -209,6 +170,7 @@ function App() {
               {transacoes.map((t) => {
                 const isReceita = t.tipo === 1 || t.tipo === 'Receita';
                 const dataFormatada = new Date(t.data || t.dataTransacao).toLocaleDateString('pt-BR');
+                const compensado = Boolean(t.dataCompensacao || t.isPago);
 
                 return (
                   <tr key={t.id}>
@@ -218,6 +180,7 @@ function App() {
                       <span className={`tag ${isReceita ? 'tag-receita' : 'tag-despesa'}`}>
                         {isReceita ? 'Receita' : 'Despesa'}
                       </span>
+                      {!compensado && <span className="tag tag-pendente">Previsto</span>}
                     </td>
                     <td>R$ {t.valor.toFixed(2)}</td>
                   </tr>

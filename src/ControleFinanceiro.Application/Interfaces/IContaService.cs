@@ -9,4 +9,5 @@ public interface IContaService
     Task<ContaResponseDto?> ObterPorIdAsync(int id);
     Task<ContaResponseDto?> AtualizarAsync(int id, AtualizarContaDto dto);
     Task<bool> AlterarStatusAsync(int id, bool ativa);
+    Task<DashboardContasDto> ObterResumoDashboardAsync(DateTime? dataCorte = null);
 }

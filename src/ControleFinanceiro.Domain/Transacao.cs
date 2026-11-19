@@ -7,6 +7,7 @@ public class Transacao
     public decimal Valor { get; set; }
     public TipoTransacao Tipo { get; set; }
     public DateTime Data { get; set; }
+    public DateTime? DataCompensacao { get; set; }
     public bool IsPago { get; set; }
 
     // Chaves Estrangeiras (Relacionamentos)

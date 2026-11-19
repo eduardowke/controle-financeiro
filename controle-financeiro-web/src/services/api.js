@@ -1,4 +1,4 @@
-// Tenta HTTPS (7184) por padrão; se falhar por certificado local, você pode apontar para http://localhost:5188
+// Tenta HTTPS (7184) por padrão; se estiver usando HTTP, ajuste para 'http://localhost:5188/api'
 const API_BASE_URL = 'https://localhost:7184/api';
 
 async function request(endpoint, options = {}) {
@@ -32,6 +32,8 @@ export const api = {
     request(`/bancos${filtro ? `?filtro=${encodeURIComponent(filtro)}` : ''}`),
   listarContas: (incluirInativas = false) =>
     request(`/contas?incluirInativas=${incluirInativas}`),
+  obterResumoDashboard: (dataCorte) =>
+    request(`/contas/resumo-dashboard${dataCorte ? `?dataCorte=${dataCorte}` : ''}`),
   criarConta: (dados) =>
     request('/contas', {
       method: 'POST',
