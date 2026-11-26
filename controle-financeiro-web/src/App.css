@@ -709,3 +709,161 @@ body {
   color: #fba94c;
   margin-left: 0.4rem;
 }
+/* =========================================================
+   US 269: Painel Individual da Conta e Extrato
+   ========================================================= */
+.link-conta-extrato {
+  background: transparent;
+  border: none;
+  color: #e1e1e6;
+  font-weight: 700;
+  font-size: 0.98rem;
+  padding: 0;
+  cursor: pointer;
+  text-align: left;
+  text-decoration: underline;
+  text-decoration-color: #00b37e66;
+  text-underline-offset: 3px;
+}
+
+.link-conta-extrato:hover {
+  color: #00b37e;
+  text-decoration-color: #00b37e;
+}
+
+.painel-conta {
+  margin-bottom: 3rem;
+}
+
+.painel-conta-topo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 1.2rem;
+  flex-wrap: wrap;
+  gap: 0.8rem;
+}
+
+.btn-voltar {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.painel-conta-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.painel-conta-info {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.painel-conta-info h2 {
+  font-size: 1.4rem;
+  margin-bottom: 0.25rem;
+}
+
+.painel-conta-icone {
+  background-color: #29292e;
+  padding: 0.9rem;
+  border-radius: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.painel-conta-saldos {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+}
+
+.saldo-box {
+  display: flex;
+  flex-direction: column;
+  gap: 0.25rem;
+  background-color: #121214;
+  padding: 0.75rem 1.1rem;
+  border-radius: 8px;
+  border: 1px solid #323238;
+}
+
+.saldo-box span {
+  font-size: 0.78rem;
+  color: #a8a8b3;
+}
+
+.saldo-box strong {
+  font-size: 1.15rem;
+}
+
+.form-lancamento-rapido {
+  margin-bottom: 1.8rem;
+  border-color: #00b37e55;
+}
+
+.form-lancamento-rapido h3 {
+  margin-top: 0;
+  margin-bottom: 1.2rem;
+}
+
+.form-grid-lancamento {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 1rem;
+}
+
+.check-compensado {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  padding: 0.65rem 0;
+}
+
+.check-compensado input[type='checkbox'] {
+  width: 18px;
+  height: 18px;
+  accent-color: #00b37e;
+  cursor: pointer;
+}
+.acoes-linha {
+  display: flex;
+  align-items: center;
+  gap: 0.4rem;
+}
+
+.btn-icone {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 30px;
+  height: 30px;
+  border-radius: 6px;
+  border: 1px solid #323238;
+  background-color: #202024;
+  color: #a8a8b3;
+  cursor: pointer;
+}
+
+.btn-icone:hover {
+  border-color: #00b37e;
+  color: #00b37e;
+  background-color: #00b37e18;
+}
+
+.btn-icone-excluir:hover {
+  border-color: #f75a68;
+  color: #f75a68;
+  background-color: #f75a6818;
+}
+
+.modal-footer-split {
+  justify-content: space-between;
+}

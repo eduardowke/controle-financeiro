@@ -123,6 +123,12 @@ app.MapGet("/api/contas/{id:int}", async (int id, IContaService service) =>
     return conta is null ? Results.NotFound("Conta não encontrada.") : Results.Ok(conta);
 });
 
+app.MapGet("/api/contas/{id:int}/extrato", async (int id, ITransacaoService service) =>
+{
+    var extrato = await service.ObterExtratoPorContaAsync(id);
+    return extrato is null ? Results.NotFound("Conta não encontrada.") : Results.Ok(extrato);
+});
+
 app.MapPut("/api/contas/{id:int}", async (int id, AtualizarContaDto dto, IContaService service) =>
 {
     try
@@ -158,14 +164,39 @@ app.MapGet("/api/categorias", async (ICategoriaService service) =>
 // --- ENDPOINTS DE TRANSAÇÕES ---
 app.MapPost("/api/transacoes", async (CriarTransacaoDto dto, ITransacaoService service) =>
 {
-    var transacao = await service.CriarTransacaoAsync(dto);
-    return Results.Created($"/api/transacoes/{transacao.Id}", transacao);
+    try
+    {
+        var transacao = await service.CriarTransacaoAsync(dto);
+        return Results.Created($"/api/transacoes/{transacao.Id}", transacao);
+    }
+    catch (ArgumentException ex)
+    {
+        return Results.BadRequest(new { erro = ex.Message });
+    }
 });
-
 app.MapGet("/api/transacoes", async (ITransacaoService service) =>
 {
     var transacoes = await service.ObterTodasAsync();
     return Results.Ok(transacoes);
+});
+
+app.MapPut("/api/transacoes/{id:int}", async (int id, AtualizarTransacaoDto dto, ITransacaoService service) =>
+{
+    try
+    {
+        var atualizado = await service.AtualizarTransacaoAsync(id, dto);
+        return atualizado is null ? Results.NotFound("Transação não encontrada.") : Results.Ok(atualizado);
+    }
+    catch (ArgumentException ex)
+    {
+        return Results.BadRequest(new { erro = ex.Message });
+    }
+});
+
+app.MapDelete("/api/transacoes/{id:int}", async (int id, ITransacaoService service) =>
+{
+    var removido = await service.ExcluirTransacaoAsync(id);
+    return removido ? Results.NoContent() : Results.NotFound("Transação não encontrada.");
 });
 
 // --- ENDPOINT DE IA (CATEGORIZADOR) ---

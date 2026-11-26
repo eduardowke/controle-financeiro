@@ -23,7 +23,9 @@ async function request(endpoint, options = {}) {
   }
 
   if (response.status === 204) return null;
-  return response.json();
+
+  const texto = await response.text();
+  return texto ? JSON.parse(texto) : null;
 }
 
 export const api = {
@@ -49,4 +51,20 @@ export const api = {
       method: 'PATCH',
     }),
   listarTransacoes: () => request('/Transacoes'),
+  obterExtratoConta: (contaId) => request(`/contas/${contaId}/extrato`),
+  listarCategorias: () => request('/categorias'),
+  criarTransacao: (dados) =>
+    request('/transacoes', {
+      method: 'POST',
+      body: JSON.stringify(dados),
+    }),
+  atualizarTransacao: (id, dados) =>
+    request(`/transacoes/${id}`, {
+      method: 'PUT',
+      body: JSON.stringify(dados),
+    }),
+  excluirTransacao: (id) =>
+    request(`/transacoes/${id}`, {
+      method: 'DELETE',
+    }),
 };

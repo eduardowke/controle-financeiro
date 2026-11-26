@@ -17,10 +17,9 @@ const formatarDataBr = (isoDate) => {
   return `${dia}/${mes}/${ano}`;
 };
 
-export function DashboardContas({ resumo, dataCorte, onChangeDataCorte, carregando }) {
+export function DashboardContas({ resumo, dataCorte, onChangeDataCorte, onSelecionarConta, carregando }) {
   const obterDataISO = (dateObj) => dateObj.toISOString().split('T')[0];
-
-  const aplicarAtalhoData = (tipo) => {
+const aplicarAtalhoData = (tipo) => {
     const hoje = new Date();
     if (tipo === 'hoje') {
       onChangeDataCorte(obterDataISO(hoje));
@@ -166,7 +165,13 @@ export function DashboardContas({ resumo, dataCorte, onChangeDataCorte, carregan
               {resumo.contasBancarias.map((c) => (
                 <tr key={c.id}>
                   <td>
-                    <strong>{c.nome}</strong>
+                    <button
+                      type="button"
+                      className="link-conta-extrato"
+                      onClick={() => onSelecionarConta && onSelecionarConta(c.id)}
+                    >
+                      {c.nome}
+                    </button>
                     <div className="subtexto-tabela">{c.titular}</div>
                   </td>
                   <td>
@@ -221,7 +226,13 @@ export function DashboardContas({ resumo, dataCorte, onChangeDataCorte, carregan
               {resumo.cartoesCredito.map((c) => (
                 <tr key={c.id}>
                   <td>
-                    <strong>{c.nome}</strong>
+                    <button
+                      type="button"
+                      className="link-conta-extrato"
+                      onClick={() => onSelecionarConta && onSelecionarConta(c.id)}
+                    >
+                      {c.nome}
+                    </button>
                   </td>
                   <td>
                     {c.numBanco} - {c.nomeBanco}

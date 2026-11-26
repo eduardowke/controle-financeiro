@@ -13,6 +13,7 @@ import {
 import { api } from './services/api';
 import { ModalCadastroConta } from './components/ModalCadastroConta';
 import { DashboardContas } from './components/DashboardContas';
+import { PainelConta } from './components/PainelConta';
 import './App.css';
 
 function obterFimDoMesAtualISO() {
@@ -28,6 +29,7 @@ function App() {
   const [loading, setLoading] = useState(true);
   const [erro, setErro] = useState(null);
   const [modalContaAberto, setModalContaAberto] = useState(false);
+  const [contaSelecionadaId, setContaSelecionadaId] = useState(null);
 
   // Estados do Chat
   const [mensagens, setMensagens] = useState([
@@ -141,55 +143,22 @@ function App() {
 
       {erro && <div className="card-erro">{erro}</div>}
 
-      {/* Novo Dashboard: Liquidez Atual, Projeção por Data e Separação de Cartões (US 267) */}
-      <DashboardContas
-        resumo={resumoDashboard}
-        dataCorte={dataCorte}
-        onChangeDataCorte={setDataCorte}
-        carregando={loading}
-      />
-
-      {/* Tabela de Transações */}
-      <section className="section-transacoes">
-        <h2>Últimas Transações</h2>
-        {loading ? (
-          <p>Carregando dados da API...</p>
-        ) : transacoes.length === 0 ? (
-          <p>Nenhuma transação cadastrada.</p>
-        ) : (
-          <table className="tabela">
-            <thead>
-              <tr>
-                <th>Data Prevista</th>
-                <th>Descrição</th>
-                <th>Status</th>
-                <th>Valor</th>
-              </tr>
-            </thead>
-            <tbody>
-              {transacoes.map((t) => {
-                const isReceita = t.tipo === 1 || t.tipo === 'Receita';
-                const dataFormatada = new Date(t.data || t.dataTransacao).toLocaleDateString('pt-BR');
-                const compensado = Boolean(t.dataCompensacao || t.isPago);
-
-                return (
-                  <tr key={t.id}>
-                    <td>{dataFormatada}</td>
-                    <td>{t.descricao}</td>
-                    <td>
-                      <span className={`tag ${isReceita ? 'tag-receita' : 'tag-despesa'}`}>
-                        {isReceita ? 'Receita' : 'Despesa'}
-                      </span>
-                      {!compensado && <span className="tag tag-pendente">Previsto</span>}
-                    </td>
-                    <td>R$ {t.valor.toFixed(2)}</td>
-                  </tr>
-                );
-              })}
-            </tbody>
-          </table>
-        )}
-      </section>
+      {/* Novo Dashboard ou Painel Detalhado da Conta Selecionada */}
+      {contaSelecionadaId !== null ? (
+        <PainelConta
+          contaId={contaSelecionadaId}
+          onVoltar={() => setContaSelecionadaId(null)}
+          onAtualizarDashboard={() => carregarDados(dataCorte)}
+        />
+      ) : (
+        <DashboardContas
+          resumo={resumoDashboard}
+          dataCorte={dataCorte}
+          onChangeDataCorte={setDataCorte}
+          carregando={loading}
+          onSelecionarConta={setContaSelecionadaId}
+        />
+      )}
 
       {/* Seção do Chat com IA */}
       <section className="section-chat">

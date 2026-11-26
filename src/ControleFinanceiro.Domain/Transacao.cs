@@ -8,6 +8,7 @@ public class Transacao
     public TipoTransacao Tipo { get; set; }
     public DateTime Data { get; set; }
     public DateTime? DataCompensacao { get; set; }
+    public int Ordem { get; set; }
     public bool IsPago { get; set; }
 
     // Chaves Estrangeiras (Relacionamentos)
@@ -17,7 +18,10 @@ public class Transacao
     public int CategoriaId { get; set; }
     public Categoria Categoria { get; set; } = null!;
 
-    // Novas propriedades para suporte à IA e rastreabilidade
+    // Vínculo entre transações espelhadas (Transferência / Pagamento de Fatura)
+    public Guid? TransferenciaGrupoId { get; set; }
+
+    // Propriedades para suporte à IA e rastreabilidade
     public double? ConfiancaIA { get; set; }
     public DateTime DataCriacao { get; set; } = DateTime.UtcNow;
 }

@@ -355,8 +355,14 @@ namespace ControleFinanceiro.Infrastructure.Migrations
                     b.Property<bool>("IsPago")
                         .HasColumnType("bit");
 
+                    b.Property<int>("Ordem")
+                        .HasColumnType("int");
+
                     b.Property<int>("Tipo")
                         .HasColumnType("int");
+
+                    b.Property<Guid?>("TransferenciaGrupoId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.Property<decimal>("Valor")
                         .HasPrecision(18, 2)
